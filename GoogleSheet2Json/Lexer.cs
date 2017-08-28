@@ -22,17 +22,27 @@ namespace GoogleSheet2Json
             this.parser = parser;
         }
 
-        public void Lex(IList<object> keys, IList<object> values)
+        public void Lex(IList<object> keys, IList<IList<object>> dataValues)
         {
             parser.Start();
 
-            for(int i = 0; i < keys.Count; i ++)
-            {
-                var key = keys[i];
-                var value = values[i];
+            // define property container
+            parser.Name("root");
 
-                LexKey(key.ToString());
-                LexValue(value.ToString());
+            foreach(var values in dataValues)
+            {
+                for(int i = 0; i < keys.Count; i ++)
+                {
+                    var key = keys[i];
+                    var value = values[i];
+
+                    LexKey(key.ToString());
+                    LexValue(value.ToString());
+
+                    #if DEBUG
+                    Console.WriteLine(string.Format("Lexed data with key: {0} and value: {1}\n", key, value));
+                    #endif
+                }
             }
 
              parser.End();
@@ -45,7 +55,7 @@ namespace GoogleSheet2Json
 
         private void LexValue(string value)
         {
-            parser.StartValue();
+            parser.StartProperty();
 
             positionInLine = 0;
 
@@ -53,6 +63,8 @@ namespace GoogleSheet2Json
             {
                 LexToken(value);
             }
+
+            parser.EndProperty();
         }
 
         private void LexToken(string value)
@@ -73,7 +85,7 @@ namespace GoogleSheet2Json
             if (positionInLine < value.Length)
             {
                 var subString = value.Substring(positionInLine);
-                var regex = Regex.Match(subString, EMPTY_SPACE_REGEX);
+                var regex = Regex.Match(subString, EMPTY_SPACE_PATTERN);
                 if (regex.Success)
                 {
                     positionInLine += regex.Value.Length;
@@ -116,7 +128,7 @@ namespace GoogleSheet2Json
             if (positionInLine < value.Length)
             {
                 var subString = value.Substring(positionInLine);
-                var regex = Regex.Match(subString, NAME_REGEX);
+                var regex = Regex.Match(subString, WORD_PATTERN);
                 if (regex.Success)
                 {
                     parser.Name(regex.Value);

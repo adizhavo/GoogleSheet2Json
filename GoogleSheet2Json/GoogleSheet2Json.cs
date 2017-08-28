@@ -53,10 +53,7 @@ namespace GoogleSheet2Json
                 throw new Exception("[GoogleSheet2Json] keys or values are null, please check that the inputted data is correct");
 
             // TODO : support key value pair data definition
-            foreach(var values in dataValues)
-            {
-                lexer.Lex(dataKeys[0], values);
-            }
+            lexer.Lex(dataKeys[0], dataValues);
         }
 
         public void WriteData()
