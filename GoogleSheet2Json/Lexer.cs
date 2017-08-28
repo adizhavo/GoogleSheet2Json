@@ -10,7 +10,7 @@ namespace GoogleSheet2Json
 
     public class Lexer
     {
-        public const string NAME_REGEX = @"(\w+\s*)+";
+        public const string NAME_REGEX = @"(\w+\s*\b.*)+";
         public const string EMPTY_SPACE_REGEX = @"^\s";
 
         private Parser parser;
