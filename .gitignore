@@ -1,0 +1,43 @@
+# ==== #
+# Misc #
+# ==== #
+git_stats
+# ============ #
+# Build Output #
+# ============ #
+Output
+Output/XCodeProj/*
+Output/XCodeBuild
+*.apk
+*.ipa
+Build/
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+obj/
+*.svd
+*.userprefs
+/*.csproj
+*.pidb
+*.suo
+/*.sln
+*.user
+*.unityproj
+*.booproj
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+/Bin
+*.pyc
+*.pyc.meta
+.vscode
+*.swp
+Google_Sheet_Exporter/bin
+Google_Sheet_Exporter/packages
