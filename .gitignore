@@ -41,3 +41,5 @@ Thumbs.db
 *.swp
 Google_Sheet_Exporter/bin
 Google_Sheet_Exporter/packages
+GoogleSheet2Json/bin
+GoogleSheet2Json/packages
