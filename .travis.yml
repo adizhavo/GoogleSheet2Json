@@ -1,5 +1,6 @@
 language: csharp
 solution: GoogleSheet2Json.sln
+dist: trusty
 install:
   - nuget restore solution-name.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
