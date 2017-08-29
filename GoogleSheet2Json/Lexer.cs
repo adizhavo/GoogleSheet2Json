@@ -13,11 +13,11 @@ namespace GoogleSheet2Json
         public const string WORD_PATTERN = @"(\w+\s*[.]*)+";
         public const string EMPTY_SPACE_PATTERN = @"^\s";
 
-        private Parser parser;
+        private IParser parser;
 
         private int positionInLine = 0;
 
-        public Lexer(Parser parser)
+        public Lexer(IParser parser)
         {
             this.parser = parser;
         }

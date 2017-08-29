@@ -65,6 +65,7 @@
     <Compile Include="GoogleSheet2Json.cs" />
     <Compile Include="Lexer.cs" />
     <Compile Include="Parser.cs" />
+    <Compile Include="IParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
