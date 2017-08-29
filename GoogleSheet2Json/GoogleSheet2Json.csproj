@@ -67,5 +67,8 @@
     <Compile Include="Parser.cs" />
     <Compile Include="IParser.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
