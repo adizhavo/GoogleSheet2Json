@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{C7EF1D2A-310C-4B4C-A8BE-7CC4036C5F02}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Google_Sheet_Exporter</RootNamespace>
-    <AssemblyName>Google_Sheet_Exporter</AssemblyName>
+    <RootNamespace>GoogleSheet2Json</RootNamespace>
+    <AssemblyName>GoogleSheet2Json</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -30,33 +30,33 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Google.Apis, Version=1.20.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
+      <HintPath>..\packages\Google.Apis.1.20.0\lib\net45\Google.Apis.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.20.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
+      <HintPath>..\packages\Google.Apis.Auth.1.20.0\lib\net45\Google.Apis.Auth.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.20.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
+      <HintPath>..\packages\Google.Apis.Auth.1.20.0\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Core, Version=1.20.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
+      <HintPath>..\packages\Google.Apis.Core.1.20.0\lib\net45\Google.Apis.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices, Version=1.20.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
+      <HintPath>..\packages\Google.Apis.1.20.0\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Apis.Sheets.v4, Version=1.20.0.756, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab">
+      <HintPath>..\packages\Google.Apis.Sheets.v4.1.20.0.756\lib\net45\Google.Apis.Sheets.v4.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="Google.Apis.Sheets.v4">
-      <HintPath>packages\Google.Apis.Sheets.v4.1.20.0.756\lib\net45\Google.Apis.Sheets.v4.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Auth">
-      <HintPath>packages\Google.Apis.Auth.1.20.0\lib\net45\Google.Apis.Auth.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis">
-      <HintPath>packages\Google.Apis.1.20.0\lib\net45\Google.Apis.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Core">
-      <HintPath>packages\Google.Apis.Core.1.20.0\lib\net45\Google.Apis.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Zlib.Portable">
-      <HintPath>packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.Auth.PlatformServices">
-      <HintPath>packages\Google.Apis.Auth.1.20.0\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Apis.PlatformServices">
-      <HintPath>packages\Google.Apis.1.20.0\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
+    <Reference Include="Zlib.Portable, Version=1.11.0.0, Culture=neutral, PublicKeyToken=431cba815f6a8b5b">
+      <HintPath>..\packages\Zlib.Portable.Signed.1.11.0\lib\portable-net4+sl5+wp8+win8+wpa81+MonoTouch+MonoAndroid\Zlib.Portable.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
