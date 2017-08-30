@@ -79,11 +79,16 @@ namespace GoogleSheet2Json
             new Transition(ParserState.PROP_DEF,            ParserEvent.START_PROP,             ParserState.PROP,                   null),
             new Transition(ParserState.PROP_DEF,            ParserEvent.END_PROP,               ParserState.PROP_DEF,               null),
             new Transition(ParserState.PROP,                ParserEvent.START_PROP,             ParserState.PROP,                   null),
-
-            // states for building an array or single value
             new Transition(ParserState.PROP_DEF,            ParserEvent.SET_NAME,               ParserState.PROP,                   null),
+
+            // states for building a single value 
             new Transition(ParserState.PROP,                ParserEvent.SET_NAME,               ParserState.PROP_VALUE,             null),
-            new Transition(ParserState.PROP_VALUE,          ParserEvent.SET_COMMA,              ParserState.PROP,                   null),
+            new Transition(ParserState.PROP_VALUE,          ParserEvent.SET_DASH,               ParserState.PROP_VALUE,             null),
+            new Transition(ParserState.PROP_VALUE,          ParserEvent.OPEN_BRACE,             ParserState.PROP_VALUE,             null),
+            new Transition(ParserState.PROP_VALUE,          ParserEvent.CLOSE_BRACE,            ParserState.PROP_VALUE,             null),
+            new Transition(ParserState.PROP_VALUE,          ParserEvent.OPEN_SQUARE_BRACE,      ParserState.PROP_VALUE,             null),
+            new Transition(ParserState.PROP_VALUE,          ParserEvent.CLOSE_SQUARE_BRACE,     ParserState.PROP_VALUE,             null),
+            new Transition(ParserState.PROP_VALUE,          ParserEvent.SET_COMMA,              ParserState.PROP_VALUE,             null),
             new Transition(ParserState.PROP_VALUE,          ParserEvent.END_PROP,               ParserState.PROP_DEF,               null),
             new Transition(ParserState.PROP,                ParserEvent.END_PROP,               ParserState.PROP_DEF,               null),
 

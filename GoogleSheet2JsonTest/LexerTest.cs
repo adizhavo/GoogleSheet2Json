@@ -61,41 +61,41 @@ namespace GoogleSheet2JsonTest
              
             Assert.AreEqual("s n n s_p n e_p e", mockParser.transition);
         }
-        
+
         [Test]
-        public void LexArrayOfNumbersWithTwoElementsTest()
+        public void LexMultipleWordsWithDotTest()
         {
-            values[0].Add("1, 2");
+            values[0].Add("word with special . dot");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n c n e_p e", mockParser.transition);
+            Assert.AreEqual("s n n s_p n n e_p e", mockParser.transition);
+        }
+
+        [Test]
+        public void LexMultipleWordsWithDashTest()
+        {
+            values[0].Add("word with special - dash");
+            lexer.Lex(keys, values);
+            
+            Assert.AreEqual("s n n s_p n d n e_p e", mockParser.transition);
         }
         
         [Test]
-        public void LexArrayOfNumbersWithMultipleElementsTest()
+        public void LexMultipleWordsWithSquareBraceTest()
         {
-            values[0].Add("1, 2, 3, 4, 5");
+            values[0].Add("word with special [] square braces");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n c n c n c n c n e_p e", mockParser.transition);
+            Assert.AreEqual("s n n s_p n o_s_b c_s_b n e_p e", mockParser.transition);
         }
         
         [Test]
-        public void LexArrayOfWordsWithMultipleElementsTest()
+        public void LexMultipleWordsWithBraceTest()
         {
-            values[0].Add("first, second, third, fourth, fifth");
+            values[0].Add("word with special () braces");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n c n c n c n c n e_p e", mockParser.transition);
-        }
-        
-        [Test]
-        public void LexArrayOfNumbersWithMultipleElementsAndSpacesBetweenTest()
-        {
-            values[0].Add("1 , 2 , 3 , 4 , 5");
-            lexer.Lex(keys, values);
-            
-            Assert.AreEqual("s n n s_p n c n c n c n c n e_p e", mockParser.transition);
+            Assert.AreEqual("s n n s_p n o_b c_b n e_p e", mockParser.transition);
         }
 
         [Test]
