@@ -2,7 +2,7 @@
 {
     public class GoogleSheet2JsonApplication
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var parser = new Parser();
             var lexer = new Lexer(parser);

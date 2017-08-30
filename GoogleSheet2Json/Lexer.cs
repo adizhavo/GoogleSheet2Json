@@ -13,11 +13,11 @@ namespace GoogleSheet2Json
         public const string WORD_PATTERN = @"(\w+\s*[.]*)+";
         public const string EMPTY_SPACE_PATTERN = @"^\s";
 
-        private Parser parser;
+        private IParser parser;
 
         private int positionInLine = 0;
 
-        public Lexer(Parser parser)
+        public Lexer(IParser parser)
         {
             this.parser = parser;
         }
@@ -71,7 +71,7 @@ namespace GoogleSheet2Json
         {
             if (!TokenFound(value))
             {
-                throw new System.ArgumentException("[Lexer] value is not a valid token, please read the documentation: " + value);
+                throw new ArgumentException("[Lexer] value is not a valid token, please read the documentation: " + value);
             }
         }
 
@@ -93,7 +93,8 @@ namespace GoogleSheet2Json
 
                 return regex.Success;
             }
-            else return false;
+            
+            return false;
         }
 
         private bool IsSingleCharToken(string value)
@@ -120,7 +121,8 @@ namespace GoogleSheet2Json
 
                 return found;
             }
-            else return false;
+            
+            return false;
         }
 
         private bool IsName(string value)
