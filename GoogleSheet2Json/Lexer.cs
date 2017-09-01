@@ -10,7 +10,7 @@ namespace GoogleSheet2Json
 
     public class Lexer
     {
-        public const string WORD_PATTERN = @"(\w+\s*[.]*)+";
+        public const string WORD_PATTERN = @"(\w+\s*)*[^( \[* | \]* | \(* | \)* | \-* | \-* | \,* | *)]";
         public const string EMPTY_SPACE_PATTERN = @"^\s";
 
         private IParser parser;
@@ -71,7 +71,7 @@ namespace GoogleSheet2Json
         {
             if (!TokenFound(value))
             {
-                throw new ArgumentException("[Lexer] value is not a valid token, please read the documentation: " + value);
+                throw new ArgumentException("[Lexer] value is not a valid token, please read the documentation or tests for the supported charcters: " + value);
             }
         }
 
