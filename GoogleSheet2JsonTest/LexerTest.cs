@@ -70,6 +70,15 @@ namespace GoogleSheet2JsonTest
             
             Assert.AreEqual("s n n s_p n n e_p e", mockParser.transition);
         }
+        
+        [Test]
+        public void LexSpecialCharactersAsSingleCharactersTest()
+        {
+            values[0].Add("{ . + : ; ' ! ± @ # $ % ˆ ˜ ` ? > < … æ ‘ “ “ ≥ æ ≤ ¡ ™ £ ¢ ∞ § ¶ • ª º – ≠ œ ∑ ´ ® ¥ ¨ ˆ π ¬ ˚ ∆ ˙ © ƒ ∂ ß å Ω ç ≈ √ ˜ µ § }");
+            lexer.Lex(keys, values);
+            
+            Assert.AreEqual("s n n s_p n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n e_p e", mockParser.transition);
+        }
 
         [Test]
         public void LexMultipleWordsWithDashTest()
