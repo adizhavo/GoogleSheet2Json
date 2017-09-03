@@ -3,9 +3,9 @@ solution: GoogleSheet2Json.sln
 dist: trusty
 install:
 # set permissions
- - chmod +x ./Scripts/install.sh
- - chmod +x ./Scripts/build.sh
+ - chmod +x ./Scripts/install.bsh
+ - chmod +x ./Scripts/build.bsh
 
- - ./Scripts/install.sh
+ - ./Scripts/install.bsh
 script:
- - ./Scripts/build.sh
+ - ./Scripts/build.bsh
