@@ -60,6 +60,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Builder.cs" />
+    <Compile Include="Data.cs" />
+    <Compile Include="IBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GoogleSheet2JsonApplication.cs" />
     <Compile Include="GoogleSheet2Json.cs" />

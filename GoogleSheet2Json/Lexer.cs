@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+// ReSharper disable EmptyForStatement
 
 namespace GoogleSheet2Json
 {
@@ -40,7 +41,7 @@ namespace GoogleSheet2Json
                     LexValue(value.ToString());
 
                     #if DEBUG
-                    Console.WriteLine(string.Format("Lexed data with key: {0} and value: {1}\n", key, value));
+                    Console.WriteLine($"Lexed data with key: {key} and value: {value}\n");
                     #endif
                 }
             }
@@ -71,7 +72,7 @@ namespace GoogleSheet2Json
         {
             if (!TokenFound(value))
             {
-                throw new ArgumentException("[Lexer] value is not a valid token, please read the documentation or tests for the supported charcters: " + value);
+                throw new ArgumentException($"[Lexer] value is not a valid token, please read the documentation or tests for the supported charcters: {value}");
             }
         }
 
@@ -89,6 +90,11 @@ namespace GoogleSheet2Json
                 if (regex.Success)
                 {
                     positionInLine += regex.Value.Length;
+
+                    for (int i = 0; i < regex.Value.Length; i++)
+                    {
+                        parser.WhiteSpace();
+                    }
                 }
 
                 return regex.Success;

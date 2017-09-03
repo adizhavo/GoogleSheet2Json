@@ -22,6 +22,7 @@ namespace GoogleSheet2Json
         void OpenSquareBrackets();
         void CloseSquareBrackets();
         void Dash();
+        void WhiteSpace();
     }
 
     public enum ParserEvent
@@ -36,7 +37,8 @@ namespace GoogleSheet2Json
         CLOSE_BRACE,
         OPEN_SQUARE_BRACE,
         CLOSE_SQUARE_BRACE,
-        SET_DASH
+        SET_DASH,
+        WHITE_SPACE
     }
 
     public enum ParserState

@@ -4,7 +4,8 @@
     {
         private static void Main(string[] args)
         {
-            var parser = new Parser();
+            var builder = new Builder();
+            var parser = new Parser(builder);
             var lexer = new Lexer(parser);
             var sheet2Json = new GoogleSheet2Json(args, lexer);
             sheet2Json.ExtractData();
