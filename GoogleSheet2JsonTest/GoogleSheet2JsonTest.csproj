@@ -34,6 +34,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuilderTest.cs" />
     <Compile Include="LexerTest.cs" />
   </ItemGroup>
   <ItemGroup>
