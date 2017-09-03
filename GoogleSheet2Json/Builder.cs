@@ -8,8 +8,9 @@ namespace GoogleSheet2Json
         /// Will build the data structure for the parsed data by receiving commands
         /// from the parser
         /// </summary>
+        
+        public Data buildData { get; private set; }
 
-        private Data buildData;
         private PropertyNode buildPropertyNode;
 
         public Builder()
@@ -80,6 +81,7 @@ namespace GoogleSheet2Json
             if (buildPropertyNode.isRange)
             {
                 buildPropertyNode.max = value;
+                buildPropertyNode.fieldValue = string.Empty;
             }
             else
             {
@@ -89,16 +91,20 @@ namespace GoogleSheet2Json
 
         public void StartCollection()
         {
+            buildPropertyNode.fieldValue = string.Empty;
             buildPropertyNode.isCollection = true;
         }
 
         public void AddCollectionElement(string element)
         {
+            buildPropertyNode.fieldValue = string.Empty;
             buildPropertyNode.collectionValues.Add(element);
         }
 
         public void StartMap()
         {
+            buildPropertyNode.fieldValue = string.Empty;
+            
             if (buildPropertyNode.isMap)
             {
                 buildPropertyNode.isMap = false;
@@ -118,6 +124,8 @@ namespace GoogleSheet2Json
 
         public void AddKey(string key)
         {
+            buildPropertyNode.fieldValue = string.Empty;
+            
             if (buildPropertyNode.isMap)
             {
                 buildPropertyNode.key = key;
@@ -130,6 +138,8 @@ namespace GoogleSheet2Json
 
         public void AddValue(string value)
         {
+            buildPropertyNode.fieldValue = string.Empty;
+            
             if (buildPropertyNode.isMap)
             {
                 buildPropertyNode.value = value;

@@ -34,14 +34,14 @@ namespace GoogleSheet2Json
 
     public class PropertyNode
     {
-        public string propDefintion;
+        public string propDefintion = string.Empty;
         
-        public string fieldValue;
+        public string fieldValue = string.Empty;
         
         // properties for building a key value data
         public bool isMap;
-        public string key;
-        public string value;
+        public string key = string.Empty;
+        public string value = string.Empty;
         
         // properties for building an array of key values
         public bool isArrayOfMaps;
@@ -54,8 +54,8 @@ namespace GoogleSheet2Json
         
         // properties for building a range
         public bool isRange;
-        public string min;
-        public string max;
+        public string min = string.Empty;
+        public string max = string.Empty;
 
         public override string ToString()
         {
