@@ -12,9 +12,9 @@ namespace GoogleSheet2Json
         public ParserState currentState { get; private set; }
 
         private string setName;
-        private Builder builder;
+        private IBuilder builder;
 
-        public Parser(Builder builder)
+        public Parser(IBuilder builder)
         {
             this.builder = builder;
             BuildTransitionTable();

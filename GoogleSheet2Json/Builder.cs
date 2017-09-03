@@ -2,7 +2,7 @@
 
 namespace GoogleSheet2Json
 {
-    public class Builder
+    public class Builder : IBuilder
     {
         /// <summary>
         /// Will build the data structure for the parsed data by receiving commands
