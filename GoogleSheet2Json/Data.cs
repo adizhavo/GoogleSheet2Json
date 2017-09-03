@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace GoogleSheet2Json
 {
     /// <summary>
-    /// Represent the data structure for the data that will be passed to the generators
+    /// Data representation of the collected tokes, will go to the generator
     /// to build the json file, generate code and binaries
-    /// The builder is reposible for building this
+    /// The builder sets this up
     /// </summary>
 
     public class Data
