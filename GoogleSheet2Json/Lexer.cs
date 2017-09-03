@@ -72,7 +72,7 @@ namespace GoogleSheet2Json
         {
             if (!TokenFound(value))
             {
-                throw new ArgumentException($"[Lexer] value is not a valid token, please read the documentation or tests for the supported charcters: {value}");
+                throw new ArgumentException($"[Lexer] value is not a valid token, character nr {positionInLine}, please read the documentation or tests for the supported charcters: {value}");
             }
         }
 
