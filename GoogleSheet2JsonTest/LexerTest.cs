@@ -261,6 +261,8 @@ namespace GoogleSheet2JsonTest
         {
             transition += " d";
         }
+
+        public void WhiteSpace() { }
     }
 }
 
