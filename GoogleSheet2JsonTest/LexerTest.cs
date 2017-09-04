@@ -74,16 +74,16 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void LexSpecialCharactersAsSingleCharactersTest()
         {
-            values[0].Add("{ . + : ; ' ! ± @ # $ % ˆ ˜ ` ? > < … æ ‘ “ “ ≥ æ ≤ ¡ ™ £ ¢ ∞ § ¶ • ª º – ≠ œ ∑ ´ ® ¥ ¨ ˆ π ¬ ˚ ∆ ˙ © ƒ ∂ ß å Ω ç ≈ √ ˜ µ § }");
+            values[0].Add("{ . + : ; ' ! ± @ # $ % ˆ ˜ ` ? - < … æ ‘ “ “ ≥ æ ≤ ¡ ™ £ ¢ ∞ § ¶ • ª º – ≠ œ ∑ ´ ® ¥ ¨ ˆ π ¬ ˚ ∆ ˙ © ƒ ∂ ß å Ω ç ≈ √ ˜ µ § }");
             lexer.Lex(keys, values);
             
             Assert.AreEqual("s n n s_p n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n e_p e", mockParser.transition);
         }
 
         [Test]
-        public void LexMultipleWordsWithDashTest()
+        public void LexMultipleWordsWithRangeTest()
         {
-            values[0].Add("word with special - dash");
+            values[0].Add("word with special > dash");
             lexer.Lex(keys, values);
             
             Assert.AreEqual("s n n s_p n d n e_p e", mockParser.transition);
@@ -110,7 +110,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void LexRangeOfNumbersTest()
         {
-            values[0].Add("1-2");
+            values[0].Add("1>2");
             lexer.Lex(keys, values);
             
             Assert.AreEqual("s n n s_p n d n e_p e", mockParser.transition);
@@ -119,7 +119,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void LexRangeOfNumbersWithSpaceTest()
         {
-            values[0].Add(" 1 - 2 ");
+            values[0].Add(" 1 > 2 ");
             lexer.Lex(keys, values);
             
             Assert.AreEqual("s n n s_p n d n e_p e", mockParser.transition);
@@ -201,6 +201,42 @@ namespace GoogleSheet2JsonTest
             
             Assert.AreEqual("s n n s_p n e_p n s_p n e_p e", mockParser.transition);
         }
+
+        [Test]
+        public void LexNegativeNumbersTest()
+        {
+            values[0].Add("-1");
+            lexer.Lex(keys, values);
+            
+            Assert.AreEqual("s n n s_p n n e_p e", mockParser.transition);
+        }
+        
+        [Test]
+        public void LexNegativeNumbersRangeTest()
+        {
+            values[0].Add("-1 > -2");
+            lexer.Lex(keys, values);
+            
+            Assert.AreEqual("s n n s_p n n d n n e_p e", mockParser.transition);
+        }
+        
+        [Test]
+        public void LexNegativeNumbersCollectionTest()
+        {
+            values[0].Add("[-1 , -2]");
+            lexer.Lex(keys, values);
+            
+            Assert.AreEqual("s n n s_p o_s_b n n c n n c_s_b e_p e", mockParser.transition);
+        }
+        
+        [Test]
+        public void LexNegativeNumbersMapTest()
+        {
+            values[0].Add("(-1 , -2)");
+            lexer.Lex(keys, values);
+            
+            Assert.AreEqual("s n n s_p o_b n n c n n c_b e_p e", mockParser.transition);
+        }
     }
 
     public class MockParser : IParser
@@ -257,7 +293,7 @@ namespace GoogleSheet2JsonTest
             transition += " c_s_b";
         }
 
-        public void Dash()
+        public void Range()
         {
             transition += " d";
         }

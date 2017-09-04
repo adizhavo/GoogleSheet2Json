@@ -21,7 +21,7 @@ namespace GoogleSheet2Json
         void CloseBrace();
         void OpenSquareBrackets();
         void CloseSquareBrackets();
-        void Dash();
+        void Range();
         void WhiteSpace();
     }
 
@@ -37,7 +37,7 @@ namespace GoogleSheet2Json
         CLOSE_BRACE,
         OPEN_SQUARE_BRACE,
         CLOSE_SQUARE_BRACE,
-        SET_DASH,
+        SET_RANGE,
         WHITE_SPACE
     }
 

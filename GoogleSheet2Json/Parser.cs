@@ -73,9 +73,9 @@ namespace GoogleSheet2Json
             HandleEvent(ParserEvent.CLOSE_SQUARE_BRACE);
         }
 
-        public void Dash()
+        public void Range()
         {
-            HandleEvent(ParserEvent.SET_DASH);
+            HandleEvent(ParserEvent.SET_RANGE);
         }
 
         public void WhiteSpace()
@@ -87,10 +87,13 @@ namespace GoogleSheet2Json
         
         private void BuildTransitionTable()
         {
+            // TODO : state transitions can be improved, this is the first version and may have some edge cases
+            // tests are covering most of the usage of the parser, please report any error
+            
             transitions = new Transition[]
             {
                 // states for starting and ending the parser
-                new Transition(ParserState.DATA,                ParserEvent.START,                  ParserState.PROP_CONTAINER_DEF,     null),
+                new Transition(ParserState.DATA,                ParserEvent.START,                  ParserState.PROP_CONTAINER_DEF,     builder.StartBuild),
                 new Transition(ParserState.PROP_CONTAINER_DEF,  ParserEvent.SET_NAME,               ParserState.PROP_DEF,               () => builder.SetRootName(setName)),
                 new Transition(ParserState.PROP_DEF,            ParserEvent.END,                    ParserState.DATA,                   builder.EndBuild),
                 new Transition(ParserState.PROP_DEF,            ParserEvent.START_PROP,             ParserState.PROP,                   null),
@@ -111,9 +114,15 @@ namespace GoogleSheet2Json
                 new Transition(ParserState.PROP,                ParserEvent.END_PROP,               ParserState.PROP_DEF,               builder.EndProperty),
     
                 // states for building range value
-                new Transition(ParserState.PROP_VALUE,          ParserEvent.SET_DASH,               ParserState.PROP_RANGE,             () => builder.TryAddMinRange("-")),
+                new Transition(ParserState.PROP_VALUE,          ParserEvent.SET_RANGE,              ParserState.PROP_RANGE,             () => builder.TryAddMinRange("-")),
                 new Transition(ParserState.PROP_RANGE,          ParserEvent.SET_NAME,               ParserState.PROP_VALUE,             () => builder.TryAddMaxRange(setName)),
                 new Transition(ParserState.PROP_RANGE,          ParserEvent.WHITE_SPACE,            ParserState.PROP_RANGE,             null),
+                new Transition(ParserState.PROP_RANGE,          ParserEvent.OPEN_BRACE,             ParserState.PROP_VALUE,             () => builder.AddField(")")),
+                new Transition(ParserState.PROP_RANGE,          ParserEvent.CLOSE_BRACE,            ParserState.PROP_VALUE,             () => builder.AddField("(")),
+                new Transition(ParserState.PROP_RANGE,          ParserEvent.OPEN_SQUARE_BRACE,      ParserState.PROP_VALUE,             () => builder.AddField("[")),
+                new Transition(ParserState.PROP_RANGE,          ParserEvent.CLOSE_SQUARE_BRACE,     ParserState.PROP_VALUE,             () => builder.AddField("]")),
+                new Transition(ParserState.PROP_RANGE,          ParserEvent.SET_COMMA,              ParserState.PROP_VALUE,             () => builder.AddField(",")),
+                
                 
                 // states for building collections
                 new Transition(ParserState.PROP,                ParserEvent.OPEN_SQUARE_BRACE,      ParserState.PROP_COLL,              builder.StartCollection),
@@ -153,7 +162,7 @@ namespace GoogleSheet2Json
 
             if (pEvent != ParserEvent.WHITE_SPACE)
             {
-                throw new Exception($"[Parser] Received invalid event {pEvent} when in state {currentState}");
+                throw new Exception($"[Parser] Received invalid event {pEvent} when in state {currentState}, this is an edge case, please contact the developer");
             }
         }
 

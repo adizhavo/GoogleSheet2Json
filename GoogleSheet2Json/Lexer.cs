@@ -11,7 +11,7 @@ namespace GoogleSheet2Json
 
     public class Lexer
     {
-        public const string WORD_PATTERN = @"(\w+\s*)*[^( \[* | \]* | \(* | \)* | \-* | \-* | \,* | *)]";
+        public const string WORD_PATTERN = @"(\w+\s*)*[^( \[* | \]* | \(* | \)* | \>* | \-* | \,* | *)]";
         public const string EMPTY_SPACE_PATTERN = @"^\s";
 
         private IParser parser;
@@ -112,7 +112,7 @@ namespace GoogleSheet2Json
                 switch (character)
                 {
                     case "," : parser.Comma(); break;
-                    case "-" : parser.Dash(); break;
+                    case ">" : parser.Range(); break;
                     case "(" : parser.OpenBrace(); break;
                     case ")" : parser.CloseBrace(); break;
                     case "[" : parser.OpenSquareBrackets(); break;

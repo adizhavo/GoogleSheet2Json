@@ -36,6 +36,7 @@
   <ItemGroup>
     <Compile Include="BuilderTest.cs" />
     <Compile Include="LexerTest.cs" />
+    <Compile Include="ParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GoogleSheet2Json\GoogleSheet2Json.csproj">
