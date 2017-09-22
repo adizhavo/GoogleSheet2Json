@@ -11,10 +11,10 @@
     {
         void StartBuild();
         void SetRootName(string name);
-        void StartProperty(string propDef);
-        void EndProperty();
+        void StartField(string fieldDefintion);
+        void EndField();
         void EndBuild();
-        void AddField(string name);
+        void SetField(string name);
         void TryAddMinRange(string divider);
         void TryAddMaxRange(string value);
         void StartCollection();

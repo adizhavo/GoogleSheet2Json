@@ -11,7 +11,7 @@ namespace GoogleSheet2Json
         
         public Data buildData { get; private set; }
 
-        private PropertyNode buildPropertyNode;
+        private FieldNode fieldNode;
 
         public Builder()
         {
@@ -28,33 +28,31 @@ namespace GoogleSheet2Json
             buildData.root = name;
         }
 
-        public void StartProperty(string propDef)
+        public void StartField(string fieldDefintion)
         {
-            buildPropertyNode = new PropertyNode {propDefintion = propDef};
+            fieldNode = new FieldNode {definition = fieldDefintion};
         }
 
-        public void EndProperty()
+        public void EndField()
         {
-            buildData.properties.Add(buildPropertyNode);
+            buildData.properties.Add(fieldNode);
         }
 
         public void EndBuild()
         {
-            // call the generator to build the structure
-            
             #if DEBUG
-            Console.WriteLine($"build data: {buildData}");
+            Console.WriteLine($"End Build with data: {buildData}");
             #endif
         }
 
-        public void AddField(string name)
+        public void SetField(string name)
         {
-            buildPropertyNode.fieldValue += name;
+            fieldNode.fieldValue += name;
         }
 
         public void TryAddMinRange(string divider)
         {
-            var fValue = buildPropertyNode.fieldValue;
+            var fValue = fieldNode.fieldValue;
 
             short outShort = -1;
             int outInt = -1;
@@ -66,87 +64,87 @@ namespace GoogleSheet2Json
 
             if (isInt || isFloat)
             {
-                buildPropertyNode.isRange = true;
-                buildPropertyNode.min = buildPropertyNode.fieldValue;
-                buildPropertyNode.fieldValue = string.Empty;
+                fieldNode.isRange = true;
+                fieldNode.min = fieldNode.fieldValue;
+                fieldNode.fieldValue = string.Empty;
             }
             else
             {
-                buildPropertyNode.fieldValue += "-";
+                fieldNode.fieldValue += "-";
             }
         }
 
         public void TryAddMaxRange(string value)
         {
-            if (buildPropertyNode.isRange)
+            if (fieldNode.isRange)
             {
-                buildPropertyNode.max = value;
-                buildPropertyNode.fieldValue = string.Empty;
+                fieldNode.max = value;
+                fieldNode.fieldValue = string.Empty;
             }
             else
             {
-                buildPropertyNode.fieldValue += value;
+                fieldNode.fieldValue += value;
             }
         }
 
         public void StartCollection()
         {
-            buildPropertyNode.fieldValue = string.Empty;
-            buildPropertyNode.isCollection = true;
+            fieldNode.fieldValue = string.Empty;
+            fieldNode.isCollection = true;
         }
 
         public void AddCollectionElement(string element)
         {
-            buildPropertyNode.fieldValue = string.Empty;
-            buildPropertyNode.collectionValues.Add(element);
+            fieldNode.fieldValue = string.Empty;
+            fieldNode.collectionValues.Add(element);
         }
 
         public void StartMap()
         {
-            buildPropertyNode.fieldValue = string.Empty;
+            fieldNode.fieldValue = string.Empty;
             
-            if (buildPropertyNode.isMap)
+            if (fieldNode.isMap)
             {
-                buildPropertyNode.isMap = false;
-                buildPropertyNode.isArrayOfMaps = true;
+                fieldNode.isMap = false;
+                fieldNode.isArrayOfMaps = true;
                 
-                buildPropertyNode.keys.Add(buildPropertyNode.key);
-                buildPropertyNode.key = string.Empty;
+                fieldNode.keys.Add(fieldNode.key);
+                fieldNode.key = string.Empty;
                 
-                buildPropertyNode.values.Add(buildPropertyNode.value);
-                buildPropertyNode.value = string.Empty;
+                fieldNode.values.Add(fieldNode.value);
+                fieldNode.value = string.Empty;
             }
             else
             {
-                buildPropertyNode.isMap = true;
+                fieldNode.isMap = true;
             }
         }
 
         public void AddKey(string key)
         {
-            buildPropertyNode.fieldValue = string.Empty;
+            fieldNode.fieldValue = string.Empty;
             
-            if (buildPropertyNode.isMap)
+            if (fieldNode.isMap)
             {
-                buildPropertyNode.key = key;
+                fieldNode.key = key;
             }
-            else if (buildPropertyNode.isArrayOfMaps)
+            else if (fieldNode.isArrayOfMaps)
             {
-                buildPropertyNode.keys.Add(key);
+                fieldNode.keys.Add(key);
             }
         }
 
         public void AddValue(string value)
         {
-            buildPropertyNode.fieldValue = string.Empty;
+            fieldNode.fieldValue = string.Empty;
             
-            if (buildPropertyNode.isMap)
+            if (fieldNode.isMap)
             {
-                buildPropertyNode.value = value;
+                fieldNode.value = value;
             }
-            else if (buildPropertyNode.isArrayOfMaps)
+            else if (fieldNode.isArrayOfMaps)
             {
-                buildPropertyNode.values.Add(value);
+                fieldNode.values.Add(value);
             }
         }
     }

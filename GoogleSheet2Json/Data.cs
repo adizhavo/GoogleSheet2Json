@@ -12,7 +12,7 @@ namespace GoogleSheet2Json
     public class Data
     {
         public string root;
-        public List<PropertyNode> properties = new List<PropertyNode>();
+        public List<FieldNode> properties = new List<FieldNode>();
 
         public void Clear()
         {
@@ -32,9 +32,9 @@ namespace GoogleSheet2Json
         }
     }
 
-    public class PropertyNode
+    public class FieldNode
     {
-        public string propDefintion = string.Empty;
+        public string definition = string.Empty;
         
         public string fieldValue = string.Empty;
         
@@ -60,7 +60,7 @@ namespace GoogleSheet2Json
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"[PROP] {propDefintion}, name: {fieldValue}, isMap {isMap}, key {key}, value {value}, isRange {isRange}, min {min}, max {max},");
+            stringBuilder.Append($"[PROP] {definition}, name: {fieldValue}, isMap {isMap}, key {key}, value {value}, isRange {isRange}, min {min}, max {max},");
             stringBuilder.Append($"isArrayOfMaps {isArrayOfMaps}, keys: ");
             
             foreach(var k in keys) 

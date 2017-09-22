@@ -258,12 +258,12 @@ namespace GoogleSheet2JsonTest
             transition += " n";
         }
 
-        public void StartProperty()
+        public void StartField()
         {
             transition += " s_p";
         }
 
-        public void EndProperty()
+        public void EndField()
         {
             transition += " e_p";
         }

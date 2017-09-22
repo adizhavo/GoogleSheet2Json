@@ -31,8 +31,8 @@ namespace GoogleSheet2JsonTest
             parser.Start();
             parser.Name("root");
             parser.Name("property");
-            parser.StartProperty();
-            parser.EndProperty();
+            parser.StartField();
+            parser.EndField();
             parser.End();
             
             Assert.AreEqual("s rn sp ep eb", mockBuilder.buildPrint);
@@ -44,9 +44,9 @@ namespace GoogleSheet2JsonTest
             parser.Start();
             parser.Name("root");
             parser.Name("property");
-            parser.StartProperty();
+            parser.StartField();
             parser.Name("field");
-            parser.EndProperty();
+            parser.EndField();
             parser.End();
             
             Assert.AreEqual("s rn sp f ep eb", mockBuilder.buildPrint);
@@ -58,7 +58,7 @@ namespace GoogleSheet2JsonTest
             parser.Start();
             parser.Name("root");
             parser.Name("property");
-            parser.StartProperty();
+            parser.StartField();
             parser.Name("field");
             parser.Name("field 2");
             parser.Comma();
@@ -67,7 +67,7 @@ namespace GoogleSheet2JsonTest
             parser.OpenBrace();
             parser.OpenSquareBrackets();
             parser.CloseSquareBrackets();
-            parser.EndProperty();
+            parser.EndField();
             parser.End();
             
             Assert.AreEqual("s rn sp f f f min f f f f ep eb", mockBuilder.buildPrint);
@@ -79,11 +79,11 @@ namespace GoogleSheet2JsonTest
             parser.Start();
             parser.Name("root");
             parser.Name("property");
-            parser.StartProperty();
+            parser.StartField();
             parser.Name("1");
             parser.Range();
             parser.Name("2");
-            parser.EndProperty();
+            parser.EndField();
             parser.End();
             
             Assert.AreEqual("s rn sp f min max ep eb", mockBuilder.buildPrint);
@@ -95,13 +95,13 @@ namespace GoogleSheet2JsonTest
             parser.Start();
             parser.Name("root");
             parser.Name("property");
-            parser.StartProperty();
+            parser.StartField();
             parser.OpenSquareBrackets();
             parser.Name("1");
             parser.Comma();
             parser.Name("2");
             parser.CloseSquareBrackets();
-            parser.EndProperty();
+            parser.EndField();
             parser.End();
             
             Assert.AreEqual("s rn sp sc ac ac ep eb", mockBuilder.buildPrint);
@@ -113,13 +113,13 @@ namespace GoogleSheet2JsonTest
             parser.Start();
             parser.Name("root");
             parser.Name("property");
-            parser.StartProperty();
+            parser.StartField();
             parser.OpenBrace();
             parser.Name("key");
             parser.Comma();
             parser.Name("value");
             parser.CloseBrace();
-            parser.EndProperty();
+            parser.EndField();
             parser.End();
             
             Assert.AreEqual("s rn sp sm ak av ep eb", mockBuilder.buildPrint);
@@ -139,12 +139,12 @@ namespace GoogleSheet2JsonTest
                 buildPrint += " rn";
             }
 
-            public void StartProperty(string propDef)
+            public void StartField(string fieldDefintion)
             {
                 buildPrint += " sp";
             }
 
-            public void EndProperty()
+            public void EndField()
             {
                 buildPrint += " ep";
             }
@@ -154,7 +154,7 @@ namespace GoogleSheet2JsonTest
                 buildPrint += " eb";
             }
 
-            public void AddField(string name)
+            public void SetField(string name)
             {
                 buildPrint += " f";
             }

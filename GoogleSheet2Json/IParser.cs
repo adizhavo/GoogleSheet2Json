@@ -14,8 +14,8 @@ namespace GoogleSheet2Json
         void Start();
         void End();
         void Name(string name);
-        void StartProperty();
-        void EndProperty();
+        void StartField();
+        void EndField();
         void Comma();
         void OpenBrace();
         void CloseBrace();
@@ -29,8 +29,8 @@ namespace GoogleSheet2Json
     {
         START,
         END,
-        START_PROP,
-        END_PROP,
+        START_FIELD,
+        END_FIELD,
         SET_NAME,
         SET_COMMA,
         OPEN_BRACE,

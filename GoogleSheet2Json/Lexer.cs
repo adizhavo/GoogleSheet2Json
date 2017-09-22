@@ -56,7 +56,7 @@ namespace GoogleSheet2Json
 
         private void LexValue(string value)
         {
-            parser.StartProperty();
+            parser.StartField();
 
             positionInLine = 0;
 
@@ -65,7 +65,7 @@ namespace GoogleSheet2Json
                 LexToken(value);
             }
 
-            parser.EndProperty();
+            parser.EndField();
         }
 
         private void LexToken(string value)
