@@ -4,12 +4,14 @@
     {
         private static void Main(string[] args)
         {
+            var sheet2Json = new GoogleSheet2Json();
+            sheet2Json.ReadDataFromSheet();
+            
             var builder = new Builder();
             var parser = new Parser(builder);
             var lexer = new Lexer(parser);
-            var sheet2Json = new GoogleSheet2Json(args, lexer);
-            sheet2Json.ExtractData();
-            sheet2Json.WriteData();
+            
+            lexer.Lex(sheet2Json.dataKeys[0], sheet2Json.dataValues);
         }
     }
 }
