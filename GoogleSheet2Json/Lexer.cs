@@ -32,8 +32,12 @@ namespace GoogleSheet2Json
 
             foreach(var values in dataValues)
             {
+                parser.StartProperty();
+                
                 for(int i = 0; i < keys.Count; i ++)
                 {
+                    parser.StartField();
+                    
                     var key = keys[i];
                     var value = values[i];
 
@@ -43,10 +47,14 @@ namespace GoogleSheet2Json
                     #if DEBUG
                     Console.WriteLine($"Lexed data with key: {key} and value: {value}\n");
                     #endif
+                    
+                    parser.EndField();
                 }
+                
+                parser.EndProperty();
             }
 
-             parser.End();
+            parser.End();
         }
 
         private void LexKey(string key)
@@ -56,16 +64,12 @@ namespace GoogleSheet2Json
 
         private void LexValue(string value)
         {
-            parser.StartProperty();
-
             positionInLine = 0;
 
             while(positionInLine < value.Length)
             {
                 LexToken(value);
             }
-
-            parser.EndProperty();
         }
 
         private void LexToken(string value)

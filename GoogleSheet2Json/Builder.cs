@@ -9,52 +9,70 @@ namespace GoogleSheet2Json
         /// from the parser
         /// </summary>
         
-        public Data buildData { get; private set; }
+        public Data BuildData { get; private set; }
 
-        private PropertyNode buildPropertyNode;
+        private PropertyNode propertyNode;
+        private FieldNode fieldNode;
 
         public Builder()
         {
-            buildData = new Data();
+            BuildData = new Data();
         }
 
         public void StartBuild()
         {
-            buildData.Clear();
+            BuildData.root = string.Empty;
+            BuildData.properties.Clear();
         }
 
         public void SetRootName(string name)
         {
-            buildData.root = name;
+            BuildData.root = name;
         }
 
-        public void StartProperty(string propDef)
+        public void StartProperty()
         {
-            buildPropertyNode = new PropertyNode {propDefintion = propDef};
+            propertyNode = new PropertyNode();
         }
 
         public void EndProperty()
         {
-            buildData.properties.Add(buildPropertyNode);
+            BuildData.properties.Add(propertyNode);
+
+            #if DEBUG
+            Console.WriteLine($"End property with fields: {propertyNode}");
+            #endif
+        }
+
+        public void StartField(string fieldDefintion)
+        {
+            fieldNode = new FieldNode {definition = fieldDefintion};
+        }
+
+        public void EndField()
+        {
+            propertyNode.fields.Add(fieldNode);
+            
+            #if DEBUG
+            Console.WriteLine($"End field with data: {fieldNode}");
+            #endif
         }
 
         public void EndBuild()
         {
-            // call the generator to build the structure
-            
             #if DEBUG
-            Console.WriteLine($"build data: {buildData}");
+            Console.WriteLine($"End Build with data: {BuildData}");
             #endif
         }
 
-        public void AddField(string name)
+        public void SetField(string name)
         {
-            buildPropertyNode.fieldValue += name;
+            fieldNode.fieldValue += name;
         }
 
         public void TryAddMinRange(string divider)
         {
-            var fValue = buildPropertyNode.fieldValue;
+            var fValue = fieldNode.fieldValue;
 
             short outShort = -1;
             int outInt = -1;
@@ -66,87 +84,119 @@ namespace GoogleSheet2Json
 
             if (isInt || isFloat)
             {
-                buildPropertyNode.isRange = true;
-                buildPropertyNode.min = buildPropertyNode.fieldValue;
-                buildPropertyNode.fieldValue = string.Empty;
+                fieldNode.isRange = true;
+                fieldNode.min = fieldNode.fieldValue;
+                fieldNode.fieldValue = string.Empty;
             }
             else
             {
-                buildPropertyNode.fieldValue += "-";
+                fieldNode.fieldValue += "-";
             }
         }
 
         public void TryAddMaxRange(string value)
         {
-            if (buildPropertyNode.isRange)
+            if (fieldNode.isRange)
             {
-                buildPropertyNode.max = value;
-                buildPropertyNode.fieldValue = string.Empty;
+                fieldNode.max = value;
+                fieldNode.fieldValue = string.Empty;
             }
             else
             {
-                buildPropertyNode.fieldValue += value;
+                fieldNode.fieldValue += value;
             }
         }
 
         public void StartCollection()
         {
-            buildPropertyNode.fieldValue = string.Empty;
-            buildPropertyNode.isCollection = true;
+            fieldNode.fieldValue = string.Empty;
+            fieldNode.isCollection = true;
         }
 
-        public void AddCollectionElement(string element)
+        public void AddFieldToCollection()
         {
-            buildPropertyNode.fieldValue = string.Empty;
-            buildPropertyNode.collectionValues.Add(element);
+            fieldNode.collectionValues.Add(fieldNode.fieldValue.Trim());
+            fieldNode.fieldValue = string.Empty;
         }
 
         public void StartMap()
         {
-            buildPropertyNode.fieldValue = string.Empty;
+            fieldNode.fieldValue = string.Empty;
             
-            if (buildPropertyNode.isMap)
+            if (fieldNode.isMap)
             {
-                buildPropertyNode.isMap = false;
-                buildPropertyNode.isArrayOfMaps = true;
+                fieldNode.isMap = false;
+                fieldNode.isArrayOfMaps = true;
                 
-                buildPropertyNode.keys.Add(buildPropertyNode.key);
-                buildPropertyNode.key = string.Empty;
+                fieldNode.keys.Add(fieldNode.key);
+                fieldNode.key = string.Empty;
                 
-                buildPropertyNode.values.Add(buildPropertyNode.value);
-                buildPropertyNode.value = string.Empty;
+                fieldNode.values.Add(fieldNode.value);
+                fieldNode.value = string.Empty;
             }
             else
             {
-                buildPropertyNode.isMap = true;
+                fieldNode.isMap = true;
             }
         }
 
         public void AddKey(string key)
         {
-            buildPropertyNode.fieldValue = string.Empty;
+            fieldNode.fieldValue = string.Empty;
             
-            if (buildPropertyNode.isMap)
+            if (fieldNode.isMap)
             {
-                buildPropertyNode.key = key;
+                fieldNode.key = key;
             }
-            else if (buildPropertyNode.isArrayOfMaps)
+            else if (fieldNode.isArrayOfMaps)
             {
-                buildPropertyNode.keys.Add(key);
+                fieldNode.keys.Add(key);
             }
         }
 
         public void AddValue(string value)
         {
-            buildPropertyNode.fieldValue = string.Empty;
+            fieldNode.fieldValue = string.Empty;
             
-            if (buildPropertyNode.isMap)
+            if (fieldNode.isMap)
             {
-                buildPropertyNode.value = value;
+                fieldNode.value = value;
             }
-            else if (buildPropertyNode.isArrayOfMaps)
+            else if (fieldNode.isArrayOfMaps)
             {
-                buildPropertyNode.values.Add(value);
+                fieldNode.values.Add(value);
+            }
+        }
+
+        public void AppendToKey(string key)
+        {
+            if (fieldNode.isMap)
+            {
+                fieldNode.key += key;
+            }
+            else if (fieldNode.isArrayOfMaps && fieldNode.keys.Count > 0)
+            {
+                fieldNode.keys[fieldNode.keys.Count - 1] += key;
+            }
+        }
+        
+        public void AppendToValue(string value)
+        {
+            if (fieldNode.isMap)
+            {
+                fieldNode.value += value;
+            }
+            else if (fieldNode.isArrayOfMaps && fieldNode.values.Count > 0)
+            {
+                fieldNode.values[fieldNode.values.Count - 1] += value;
+            }
+        }
+
+        public void AppendToLastElementOfCollection(string append)
+        {
+            if (fieldNode.isCollection && fieldNode.collectionValues.Count > 0)
+            {
+                fieldNode.collectionValues[fieldNode.collectionValues.Count - 1] += append;
             }
         }
     }

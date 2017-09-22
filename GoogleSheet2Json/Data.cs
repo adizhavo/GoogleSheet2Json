@@ -13,28 +13,42 @@ namespace GoogleSheet2Json
     {
         public string root;
         public List<PropertyNode> properties = new List<PropertyNode>();
+        
+        public override string ToString()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append($"[DATA] {root}");
+            
+            foreach(var property in properties) 
+                stringBuilder.Append(property + "\n");
+
+            return stringBuilder.ToString();
+        }
+    }
+    
+    public class PropertyNode
+    {
+        public List<FieldNode> fields = new List<FieldNode>();
 
         public void Clear()
         {
-            root = string.Empty;
-            properties.Clear();
+            fields.Clear();
         }
 
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"[DATA] {root}\n");
             
-            foreach(var prop in properties) 
-                stringBuilder.Append(prop + "\n");
+            foreach(var field in fields) 
+                stringBuilder.Append(field + "\n");
 
             return stringBuilder.ToString();
         }
     }
 
-    public class PropertyNode
+    public class FieldNode
     {
-        public string propDefintion = string.Empty;
+        public string definition = string.Empty;
         
         public string fieldValue = string.Empty;
         
@@ -60,7 +74,7 @@ namespace GoogleSheet2Json
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"[PROP] {propDefintion}, name: {fieldValue}, isMap {isMap}, key {key}, value {value}, isRange {isRange}, min {min}, max {max},");
+            stringBuilder.Append($"[FIELD] {definition}, name: {fieldValue}, isMap {isMap}, key {key}, value {value}, isRange {isRange}, min {min}, max {max},");
             stringBuilder.Append($"isArrayOfMaps {isArrayOfMaps}, keys: ");
             
             foreach(var k in keys) 

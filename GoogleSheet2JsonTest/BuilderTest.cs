@@ -15,32 +15,39 @@ namespace GoogleSheet2JsonTest
         }
 
         [Test]
-        public void PropertyContainesOnlyTextTest()
+        public void FieldContainesOnlyTextTest()
         {
             builder.StartBuild();
-            builder.StartProperty("property");
-            builder.AddField("some value");
+            builder.StartProperty();
+            builder.StartField("property");
+            builder.SetField("some value");
+            builder.EndField();
             builder.EndProperty();
-            AssertPropertyContainsOnlyText(builder.buildData.properties[0]);
+            
+            AssertFieldContainsOnlyText(builder.BuildData.properties[0].fields[0]);
         }
 
         [Test]
-        public void PropertyContainesMapTest()
+        public void FieldContainesMapTest()
         {
             builder.StartBuild();
-            builder.StartProperty("property");
+            builder.StartProperty();
+            builder.StartField("property");
             builder.StartMap();    
             builder.AddKey("key");
             builder.AddValue("value");
+            builder.EndField();
             builder.EndProperty();
-            AssertPropertyContainsMap(builder.buildData.properties[0]);
+            
+            AssertFieldContainsMap(builder.BuildData.properties[0].fields[0]);
         }
 
         [Test]
-        public void PropertyContainesArrayOfMapsTest()
+        public void FieldContainesArrayOfMapsTest()
         {
             builder.StartBuild();
-            builder.StartProperty("property");
+            builder.StartProperty();
+            builder.StartField("property");
             
             builder.StartMap();    
             builder.AddKey("key");
@@ -50,134 +57,143 @@ namespace GoogleSheet2JsonTest
             builder.AddKey("key");
             builder.AddValue("value");
             
+            builder.EndField();
             builder.EndProperty();
 
-            AssertPropertyContainsArrayOfMaps(builder.buildData.properties[0]);
+            AssertFieldContainsArrayOfMaps(builder.BuildData.properties[0].fields[0]);
         }
         
         [Test]
-        public void PropertyContainesCollectionTest()
+        public void FieldContainesCollectionTest()
         {
             builder.StartBuild();
-            builder.StartProperty("property");
+            builder.StartProperty();
+            builder.StartField("property");
             
             builder.StartCollection();
-            builder.AddCollectionElement("1");
-            builder.AddCollectionElement("2");
+            builder.SetField("1");
+            builder.AddFieldToCollection();
+            builder.SetField("2");
+            builder.AddFieldToCollection();
             
+            builder.EndField();
             builder.EndProperty();
 
-            AssertPropertyContainsCollection(builder.buildData.properties[0]);
+            AssertFieldContainsCollection(builder.BuildData.properties[0].fields[0]);
         }
 
         [Test]
-        public void PropertyContainesRangeOnlyOfNumericVariablesTest()
+        public void FieldContainesRangeOnlyOfNumericVariablesTest()
         {
             builder.StartBuild();
-            builder.StartProperty("property");
+            builder.StartProperty();
+            builder.StartField("property");
             
-            builder.AddField("1");
+            builder.SetField("1");
             builder.TryAddMinRange("-");
             builder.TryAddMaxRange("2");
 
+            builder.EndField();
             builder.EndProperty();
 
-            AssertPropertyContainsMinMaxRange(builder.buildData.properties[0]);
+            AssertFieldContainsMinMaxRange(builder.BuildData.properties[0].fields[0]);
         }
 
         [Test]
-        public void PropertyContainesTextIfTryToAddNotNumericRangeTest()
+        public void FieldContainesTextIfTryToAddNotNumericRangeTest()
         {
             builder.StartBuild();
-            builder.StartProperty("property");
+            builder.StartProperty();
+            builder.StartField("property");
             
-            builder.AddField("a");
+            builder.SetField("a");
             builder.TryAddMinRange("-");
             builder.TryAddMaxRange("b");
 
+            builder.EndField();
             builder.EndProperty();
             
-            AssertPropertyContainsOnlyText(builder.buildData.properties[0]);
+            AssertFieldContainsOnlyText(builder.BuildData.properties[0].fields[0]);
         }
 
-        private void AssertPropertyContainsOnlyText(PropertyNode propertyNode)
+        private void AssertFieldContainsOnlyText(FieldNode fieldNode)
         {
-            Assert.False(propertyNode.isArrayOfMaps);
-            Assert.False(propertyNode.isMap);
-            Assert.False(propertyNode.isCollection);
-            Assert.IsNotEmpty(propertyNode.fieldValue);
-            Assert.IsEmpty(propertyNode.value);
-            Assert.IsEmpty(propertyNode.key);
-            Assert.IsEmpty(propertyNode.values);
-            Assert.IsEmpty(propertyNode.keys);
-            Assert.IsEmpty(propertyNode.collectionValues);
-            Assert.False(propertyNode.isRange);
-            Assert.IsEmpty(propertyNode.min);
-            Assert.IsEmpty(propertyNode.max);
+            Assert.False(fieldNode.isArrayOfMaps);
+            Assert.False(fieldNode.isMap);
+            Assert.False(fieldNode.isCollection);
+            Assert.IsNotEmpty(fieldNode.fieldValue);
+            Assert.IsEmpty(fieldNode.value);
+            Assert.IsEmpty(fieldNode.key);
+            Assert.IsEmpty(fieldNode.values);
+            Assert.IsEmpty(fieldNode.keys);
+            Assert.IsEmpty(fieldNode.collectionValues);
+            Assert.False(fieldNode.isRange);
+            Assert.IsEmpty(fieldNode.min);
+            Assert.IsEmpty(fieldNode.max);
         }
         
-        private void AssertPropertyContainsMap(PropertyNode propertyNode)
+        private void AssertFieldContainsMap(FieldNode fieldNode)
         {
-            Assert.True(propertyNode.isMap);
-            Assert.IsNotEmpty(propertyNode.key);
-            Assert.IsNotEmpty(propertyNode.value);
-            Assert.False(propertyNode.isArrayOfMaps);
-            Assert.False(propertyNode.isCollection);
-            Assert.IsEmpty(propertyNode.fieldValue);
-            Assert.IsEmpty(propertyNode.values);
-            Assert.IsEmpty(propertyNode.keys);
-            Assert.IsEmpty(propertyNode.collectionValues);
-            Assert.False(propertyNode.isRange);
-            Assert.IsEmpty(propertyNode.min);
-            Assert.IsEmpty(propertyNode.max);
+            Assert.True(fieldNode.isMap);
+            Assert.IsNotEmpty(fieldNode.key);
+            Assert.IsNotEmpty(fieldNode.value);
+            Assert.False(fieldNode.isArrayOfMaps);
+            Assert.False(fieldNode.isCollection);
+            Assert.IsEmpty(fieldNode.fieldValue);
+            Assert.IsEmpty(fieldNode.values);
+            Assert.IsEmpty(fieldNode.keys);
+            Assert.IsEmpty(fieldNode.collectionValues);
+            Assert.False(fieldNode.isRange);
+            Assert.IsEmpty(fieldNode.min);
+            Assert.IsEmpty(fieldNode.max);
         }
         
-        private void AssertPropertyContainsArrayOfMaps(PropertyNode propertyNode)
+        private void AssertFieldContainsArrayOfMaps(FieldNode fieldNode)
         {
-            Assert.True(propertyNode.isArrayOfMaps);
-            Assert.IsNotEmpty(propertyNode.keys);
-            Assert.IsNotEmpty(propertyNode.values);
-            Assert.False(propertyNode.isMap);
-            Assert.False(propertyNode.isCollection);
-            Assert.IsEmpty(propertyNode.fieldValue);
-            Assert.IsEmpty(propertyNode.value);
-            Assert.IsEmpty(propertyNode.key);
-            Assert.IsEmpty(propertyNode.collectionValues);
-            Assert.False(propertyNode.isRange);
-            Assert.IsEmpty(propertyNode.min);
-            Assert.IsEmpty(propertyNode.max);
+            Assert.True(fieldNode.isArrayOfMaps);
+            Assert.IsNotEmpty(fieldNode.keys);
+            Assert.IsNotEmpty(fieldNode.values);
+            Assert.False(fieldNode.isMap);
+            Assert.False(fieldNode.isCollection);
+            Assert.IsEmpty(fieldNode.fieldValue);
+            Assert.IsEmpty(fieldNode.value);
+            Assert.IsEmpty(fieldNode.key);
+            Assert.IsEmpty(fieldNode.collectionValues);
+            Assert.False(fieldNode.isRange);
+            Assert.IsEmpty(fieldNode.min);
+            Assert.IsEmpty(fieldNode.max);
         }
         
-        private void AssertPropertyContainsCollection(PropertyNode propertyNode)
+        private void AssertFieldContainsCollection(FieldNode fieldNode)
         {
-            Assert.True(propertyNode.isCollection);
-            Assert.IsNotEmpty(propertyNode.collectionValues);
-            Assert.IsEmpty(propertyNode.keys);
-            Assert.IsEmpty(propertyNode.values);
-            Assert.False(propertyNode.isMap);
-            Assert.False(propertyNode.isArrayOfMaps);
-            Assert.IsEmpty(propertyNode.fieldValue);
-            Assert.IsEmpty(propertyNode.value);
-            Assert.IsEmpty(propertyNode.key);
-            Assert.False(propertyNode.isRange);
-            Assert.IsEmpty(propertyNode.min);
-            Assert.IsEmpty(propertyNode.max);
+            Assert.True(fieldNode.isCollection);
+            Assert.IsNotEmpty(fieldNode.collectionValues);
+            Assert.IsEmpty(fieldNode.keys);
+            Assert.IsEmpty(fieldNode.values);
+            Assert.False(fieldNode.isMap);
+            Assert.False(fieldNode.isArrayOfMaps);
+            Assert.IsEmpty(fieldNode.fieldValue);
+            Assert.IsEmpty(fieldNode.value);
+            Assert.IsEmpty(fieldNode.key);
+            Assert.False(fieldNode.isRange);
+            Assert.IsEmpty(fieldNode.min);
+            Assert.IsEmpty(fieldNode.max);
         }
         
-        private void AssertPropertyContainsMinMaxRange(PropertyNode propertyNode)
+        private void AssertFieldContainsMinMaxRange(FieldNode fieldNode)
         {
-            Assert.True(propertyNode.isRange);
-            Assert.IsNotEmpty(propertyNode.min);
-            Assert.IsNotEmpty(propertyNode.max);
-            Assert.IsEmpty(propertyNode.keys);
-            Assert.IsEmpty(propertyNode.values);
-            Assert.False(propertyNode.isMap);
-            Assert.False(propertyNode.isArrayOfMaps);
-            Assert.False(propertyNode.isCollection);
-            Assert.IsEmpty(propertyNode.fieldValue);
-            Assert.IsEmpty(propertyNode.value);
-            Assert.IsEmpty(propertyNode.key);
-            Assert.IsEmpty(propertyNode.collectionValues);
+            Assert.True(fieldNode.isRange);
+            Assert.IsNotEmpty(fieldNode.min);
+            Assert.IsNotEmpty(fieldNode.max);
+            Assert.IsEmpty(fieldNode.keys);
+            Assert.IsEmpty(fieldNode.values);
+            Assert.False(fieldNode.isMap);
+            Assert.False(fieldNode.isArrayOfMaps);
+            Assert.False(fieldNode.isCollection);
+            Assert.IsEmpty(fieldNode.fieldValue);
+            Assert.IsEmpty(fieldNode.value);
+            Assert.IsEmpty(fieldNode.key);
+            Assert.IsEmpty(fieldNode.collectionValues);
         }
     }
 }

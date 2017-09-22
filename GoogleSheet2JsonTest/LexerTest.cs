@@ -32,7 +32,7 @@ namespace GoogleSheet2JsonTest
             keys.Clear();
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n e", mockParser.transition);
+            Assert.AreEqual("s n sp ep e", mockParser.transition);
         }
         
         [Test]
@@ -41,7 +41,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -50,7 +50,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("single_word");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -59,7 +59,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("multplie words with numbers 1 2 3");
             lexer.Lex(keys, values);
              
-            Assert.AreEqual("s n n s_p n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n e_p ep e", mockParser.transition);
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("word with special . dot");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n n e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -77,7 +77,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("{ . + : ; ' ! ± @ # $ % ˆ ˜ ` ? - < … æ ‘ “ “ ≥ æ ≤ ¡ ™ £ ¢ ∞ § ¶ • ª º – ≠ œ ∑ ´ ® ¥ ¨ ˆ π ¬ ˚ ∆ ˙ © ƒ ∂ ß å Ω ç ≈ √ ˜ µ § }");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n e_p ep e", mockParser.transition);
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("word with special > dash");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n d n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n d n e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -95,7 +95,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("word with special [] square braces");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n o_s_b c_s_b n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n o_s_b c_s_b n e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -104,7 +104,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("word with special () braces");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n o_b c_b n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n o_b c_b n e_p ep e", mockParser.transition);
         }
 
         [Test]
@@ -113,7 +113,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("1>2");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n d n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n d n e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -122,7 +122,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add(" 1 > 2 ");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n d n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n d n e_p ep e", mockParser.transition);
         }
 
         [Test]
@@ -131,7 +131,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("[1,2,3,4]");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p o_s_b n c n c n c n c_s_b e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n o_s_b n c n c n c n c_s_b e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -140,7 +140,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add(" [ 1 , 2 , 3 , 4 ] ");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p o_s_b n c n c n c n c_s_b e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n o_s_b n c n c n c n c_s_b e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -149,7 +149,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add(" [ one , two , three , four ] ");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p o_s_b n c n c n c n c_s_b e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n o_s_b n c n c n c n c_s_b e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -158,7 +158,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("(one, 1)");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p o_b n c n c_b e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n o_b n c n c_b e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -167,7 +167,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("( one , 1 )");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p o_b n c n c_b e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n o_b n c n c_b e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -176,7 +176,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("(one, 1) (two, 2) (three, 3)");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p o_b n c n c_b o_b n c n c_b o_b n c n c_b e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n o_b n c n c_b o_b n c n c_b o_b n c n c_b e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -187,7 +187,7 @@ namespace GoogleSheet2JsonTest
             values[1].Add("1");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n e_p n s_p n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n e_p ep sp s_p n n e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -199,7 +199,7 @@ namespace GoogleSheet2JsonTest
             
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n e_p n s_p n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n e_p s_p n n e_p ep e", mockParser.transition);
         }
 
         [Test]
@@ -208,7 +208,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("-1");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n n e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -217,7 +217,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("-1 > -2");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p n n d n n e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n n d n n e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -226,7 +226,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("[-1 , -2]");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p o_s_b n n c n n c_s_b e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n o_s_b n n c n n c_s_b e_p ep e", mockParser.transition);
         }
         
         [Test]
@@ -235,7 +235,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("(-1 , -2)");
             lexer.Lex(keys, values);
             
-            Assert.AreEqual("s n n s_p o_b n n c n n c_b e_p e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n o_b n n c n n c_b e_p ep e", mockParser.transition);
         }
     }
 
@@ -260,10 +260,20 @@ namespace GoogleSheet2JsonTest
 
         public void StartProperty()
         {
-            transition += " s_p";
+            transition += " sp";
         }
 
         public void EndProperty()
+        {
+            transition += " ep";
+        }
+
+        public void StartField()
+        {
+            transition += " s_p";
+        }
+
+        public void EndField()
         {
             transition += " e_p";
         }

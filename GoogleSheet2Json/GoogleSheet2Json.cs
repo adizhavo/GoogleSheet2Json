@@ -16,23 +16,23 @@ namespace GoogleSheet2Json
 
     public class GoogleSheet2Json
     {
+        public IList<IList<object>> dataKeys { private set; get; }
+        public IList<IList<object>> dataValues { private set; get; }
+
         // TODO : read these values from a config file in Json and CLI arguments
         private static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         private static string ApplicationName = "GoogleSheet2Json";
         private static string spreadSheetId = "1PnKZzMfM762HAWQBUMWxO0TNIEG3RZEGI_0rKm47x0U";
         private static string userName = "Adi Zhavo";
         private static string clientSecret = "client_secret.json";
-        private static string keyRange = "A1:B";
-        private static string valueRange = "A2:B";
+        private static string keyRange = "A1:H";
+        private static string valueRange = "A2:H";
         private static string tabName = "ASSETS";
 
         private SheetsService service;
-        private Lexer lexer;
 
-        public GoogleSheet2Json(string[] args, Lexer lexer)
+        public GoogleSheet2Json()
         {
-            this.lexer = lexer;
-
             // Load credentials
             var credential = CreateUserCredentials(); 
 
@@ -44,21 +44,14 @@ namespace GoogleSheet2Json
                 });
         }
 
-        public void ExtractData()
+        public void ReadDataFromSheet()
         {
-            var dataKeys = ExtractDataFromSheet(service, spreadSheetId, tabName, keyRange);
-            var dataValues = ExtractDataFromSheet(service, spreadSheetId, tabName, valueRange);
+            // TODO : support key value pair data definition
+            dataKeys = ExtractDataFromSheet(service, spreadSheetId, tabName, keyRange);
+            dataValues = ExtractDataFromSheet(service, spreadSheetId, tabName, valueRange);
 
             if (dataKeys == null || dataValues == null)
                 throw new Exception("[GoogleSheet2Json] keys or values are null, please check that the inputted data is correct");
-
-            // TODO : support key value pair data definition
-            lexer.Lex(dataKeys[0], dataValues);
-        }
-
-        public void WriteData()
-        {
-
         }
 
         private UserCredential CreateUserCredentials()

@@ -16,6 +16,8 @@ namespace GoogleSheet2Json
         void Name(string name);
         void StartProperty();
         void EndProperty();
+        void StartField();
+        void EndField();
         void Comma();
         void OpenBrace();
         void CloseBrace();
@@ -29,8 +31,12 @@ namespace GoogleSheet2Json
     {
         START,
         END,
+        ARRAY,
+        OBJECT,
         START_PROP,
         END_PROP,
+        START_FIELD,
+        END_FIELD,
         SET_NAME,
         SET_COMMA,
         OPEN_BRACE,
@@ -43,18 +49,22 @@ namespace GoogleSheet2Json
 
     public enum ParserState
     {
-        DATA,
-        PROP_CONTAINER_DEF,
-        PROP_DEF,
-        PROP,
+        START,
+        ARRAY,
+        ARR_PROP_START,
         PROP_END,
-        PROP_VALUE,
-        PROP_RANGE,
-        PROP_COLL,
-        PROP_COLL_VALUE,
-        PROP_MAP,
-        PROP_MAP_KEY,
-        PROP_MAP_COMMA,
-        PROP_MAP_VALUE,
+        ARR_PROP_DEF,
+        FIELD_DEF,
+        FIELD,
+        FIELD_VALUE,
+        FIELD_RANGE,
+        FIELD_MAP,
+        FIELD_MAP_KEY,
+        FIELD_MAP_VALUE,
+        FIELD_MAP_COMMA,
+        FIELD_COLL,
+        FIELD_COLL_VALUE,
+        FIELD_COLL_COMMA,
+        END
     }
 }
