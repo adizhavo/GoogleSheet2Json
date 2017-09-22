@@ -20,9 +20,12 @@
         void TryAddMinRange(string divider);
         void TryAddMaxRange(string value);
         void StartCollection();
-        void AddCollectionElement(string element);
+        void AddFieldToCollection();
         void StartMap();
         void AddKey(string key);
         void AddValue(string value);
+        void AppendToKey(string key);
+        void AppendToValue(string value);
+        void AppendToLastElementOfCollection(string append);
     }
 }

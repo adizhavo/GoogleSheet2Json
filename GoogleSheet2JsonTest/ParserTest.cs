@@ -115,7 +115,7 @@ namespace GoogleSheet2JsonTest
             parser.EndProperty();
             parser.End();
             
-            Assert.AreEqual("s rn s_p sp sc ac ac ep e_p eb", mockBuilder.buildPrint);
+            Assert.AreEqual("s rn s_p sp sc f ac f ac ep e_p eb", mockBuilder.buildPrint);
         }
 
         [Test]
@@ -222,7 +222,7 @@ namespace GoogleSheet2JsonTest
                 buildPrint += " sc";
             }
 
-            public void AddCollectionElement(string element)
+            public void AddFieldToCollection()
             {
                 buildPrint += " ac";
             }
@@ -240,6 +240,21 @@ namespace GoogleSheet2JsonTest
             public void AddValue(string value)
             {
                 buildPrint += " av";
+            }
+
+            public void AppendToKey(string key)
+            {
+                buildPrint += " app_k";
+            }
+
+            public void AppendToValue(string value)
+            {
+                buildPrint += " app_v";
+            }
+
+            public void AppendToLastElementOfCollection(string append)
+            {
+                buildPrint += " app_c";
             }
         }
     }

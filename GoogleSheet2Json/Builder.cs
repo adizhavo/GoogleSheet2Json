@@ -113,10 +113,10 @@ namespace GoogleSheet2Json
             fieldNode.isCollection = true;
         }
 
-        public void AddCollectionElement(string element)
+        public void AddFieldToCollection()
         {
+            fieldNode.collectionValues.Add(fieldNode.fieldValue.Trim());
             fieldNode.fieldValue = string.Empty;
-            fieldNode.collectionValues.Add(element);
         }
 
         public void StartMap()
@@ -165,6 +165,38 @@ namespace GoogleSheet2Json
             else if (fieldNode.isArrayOfMaps)
             {
                 fieldNode.values.Add(value);
+            }
+        }
+
+        public void AppendToKey(string key)
+        {
+            if (fieldNode.isMap)
+            {
+                fieldNode.key += key;
+            }
+            else if (fieldNode.isArrayOfMaps && fieldNode.keys.Count > 0)
+            {
+                fieldNode.keys[fieldNode.keys.Count - 1] += key;
+            }
+        }
+        
+        public void AppendToValue(string value)
+        {
+            if (fieldNode.isMap)
+            {
+                fieldNode.value += value;
+            }
+            else if (fieldNode.isArrayOfMaps && fieldNode.values.Count > 0)
+            {
+                fieldNode.values[fieldNode.values.Count - 1] += value;
+            }
+        }
+
+        public void AppendToLastElementOfCollection(string append)
+        {
+            if (fieldNode.isCollection && fieldNode.collectionValues.Count > 0)
+            {
+                fieldNode.collectionValues[fieldNode.collectionValues.Count - 1] += append;
             }
         }
     }

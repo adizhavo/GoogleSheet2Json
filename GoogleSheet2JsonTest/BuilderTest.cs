@@ -71,8 +71,10 @@ namespace GoogleSheet2JsonTest
             builder.StartField("property");
             
             builder.StartCollection();
-            builder.AddCollectionElement("1");
-            builder.AddCollectionElement("2");
+            builder.SetField("1");
+            builder.AddFieldToCollection();
+            builder.SetField("2");
+            builder.AddFieldToCollection();
             
             builder.EndField();
             builder.EndProperty();
