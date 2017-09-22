@@ -13,8 +13,12 @@ namespace GoogleSheet2Json
             var builder = new Builder();
             var parser = new Parser(builder);
             var lexer = new Lexer(parser);
+            var generator = new JsonGenerator();
             
             lexer.Lex(sheet2Json.dataKeys[0], sheet2Json.dataValues);
+            generator.Generate(builder.BuildData);
+            
+            Console.WriteLine(generator.GeneratedFile);
         }
     }
 }
