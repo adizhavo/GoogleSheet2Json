@@ -25,8 +25,8 @@ namespace GoogleSheet2Json
         private static string spreadSheetId = "1PnKZzMfM762HAWQBUMWxO0TNIEG3RZEGI_0rKm47x0U";
         private static string userName = "Adi Zhavo";
         private static string clientSecret = "client_secret.json";
-        private static string keyRange = "A1:H";
-        private static string valueRange = "A2:H";
+        private static string keyRange = "A1:K";
+        private static string valueRange = "A2:K";
         private static string tabName = "ASSETS";
 
         private SheetsService service;

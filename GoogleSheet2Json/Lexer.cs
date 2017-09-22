@@ -22,36 +22,48 @@ namespace GoogleSheet2Json
 
         public void Lex(IList<object> keys, IList<IList<object>> dataValues)
         {
-            parser.Start();
-
-            // define property container
-            parser.Name("root");
-
-            foreach(var values in dataValues)
+            if (keys != null && dataValues != null)
             {
-                parser.StartProperty();
-                
-                for(int i = 0; i < keys.Count; i ++)
+                parser.Start();
+
+                // define property container
+                parser.Name("root");
+
+                foreach (var values in dataValues)
                 {
-                    parser.StartField();
-                    
-                    var key = keys[i];
-                    var value = values[i];
+                    if (values.Count > 0)
+                    {
+                        parser.StartProperty();
 
-                    LexKey(key.ToString());
-                    LexValue(value.ToString());
+                        for (int i = 0; i < keys.Count; i++)
+                        {
+                            if (i < values.Count)
+                            {
+                                var key = keys[i];
+                                var value = values[i];
 
-                    #if DEBUG
-                    Console.WriteLine($"Lexed data with key: {key} and value: {value}\n");
-                    #endif
-                    
-                    parser.EndField();
+                                if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
+                                {
+                                    parser.StartField();
+
+                                    LexKey(key.ToString());
+                                    LexValue(value.ToString());
+
+                                    parser.EndField();
+
+                                    #if DEBUG
+                                    Console.WriteLine($"Lexed data with key: {key} and value: {value}\n");
+                                    #endif
+                                }
+                            }
+                        }
+
+                        parser.EndProperty();
+                    }
                 }
-                
-                parser.EndProperty();
-            }
 
-            parser.End();
+                parser.End();
+            }
         }
 
         private void LexKey(string key)
