@@ -11,9 +11,6 @@ namespace GoogleSheet2Json
 
     public class Lexer
     {
-        public const string WORD_PATTERN = @"(\w+\s*)*[^( \[* | \]* | \(* | \)* | \>* | \-* | \,* | *)]";
-        public const string EMPTY_SPACE_PATTERN = @"^\s";
-
         private IParser parser;
 
         private int positionInLine = 0;
@@ -90,7 +87,7 @@ namespace GoogleSheet2Json
             if (positionInLine < value.Length)
             {
                 var subString = value.Substring(positionInLine);
-                var regex = Regex.Match(subString, EMPTY_SPACE_PATTERN);
+                var regex = Regex.Match(subString, StringConstants.EMPTY_SPACE_PATTERN);
                 if (regex.Success)
                 {
                     positionInLine += regex.Value.Length;
@@ -115,12 +112,12 @@ namespace GoogleSheet2Json
                 var character = value.Substring(positionInLine, 1);
                 switch (character)
                 {
-                    case "," : parser.Comma(); break;
-                    case ">" : parser.Range(); break;
-                    case "(" : parser.OpenBrace(); break;
-                    case ")" : parser.CloseBrace(); break;
-                    case "[" : parser.OpenSquareBrackets(); break;
-                    case "]" : parser.CloseSquareBrackets(); break;
+                    case StringConstants.COMMA :                parser.Comma(); break;
+                    case StringConstants.RANGE_CHAR :           parser.Range(); break;
+                    case StringConstants.OPEN_BRACKET :         parser.OpenBrace(); break;
+                    case StringConstants.CLOSE_BRACKET :        parser.CloseBrace(); break;
+                    case StringConstants.OPEN_SQUARE_BRACKET :  parser.OpenSquareBrackets(); break;
+                    case StringConstants.CLOSE_SQUARE_BRACKET : parser.CloseSquareBrackets(); break;
                     default  : found = false; break;
                 }
 
@@ -140,7 +137,7 @@ namespace GoogleSheet2Json
             if (positionInLine < value.Length)
             {
                 var subString = value.Substring(positionInLine);
-                var regex = Regex.Match(subString, WORD_PATTERN);
+                var regex = Regex.Match(subString, StringConstants.WORD_PATTERN);
                 if (regex.Success)
                 {
                     parser.Name(regex.Value);

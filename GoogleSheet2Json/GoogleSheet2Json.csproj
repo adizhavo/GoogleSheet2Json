@@ -71,6 +71,7 @@
     <Compile Include="Lexer.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="IParser.cs" />
+    <Compile Include="StringConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
