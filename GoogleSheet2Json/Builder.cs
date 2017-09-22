@@ -9,23 +9,39 @@ namespace GoogleSheet2Json
         /// from the parser
         /// </summary>
         
-        public Data buildData { get; private set; }
+        public Data BuildData { get; private set; }
 
+        private PropertyNode propertyNode;
         private FieldNode fieldNode;
 
         public Builder()
         {
-            buildData = new Data();
+            BuildData = new Data();
         }
 
         public void StartBuild()
         {
-            buildData.Clear();
+            BuildData.root = string.Empty;
+            BuildData.properties.Clear();
         }
 
         public void SetRootName(string name)
         {
-            buildData.root = name;
+            BuildData.root = name;
+        }
+
+        public void StartProperty()
+        {
+            propertyNode = new PropertyNode();
+        }
+
+        public void EndProperty()
+        {
+            BuildData.properties.Add(propertyNode);
+
+            #if DEBUG
+            Console.WriteLine($"End property with fields: {propertyNode}");
+            #endif
         }
 
         public void StartField(string fieldDefintion)
@@ -35,13 +51,17 @@ namespace GoogleSheet2Json
 
         public void EndField()
         {
-            buildData.properties.Add(fieldNode);
+            propertyNode.fields.Add(fieldNode);
+            
+            #if DEBUG
+            Console.WriteLine($"End field with data: {fieldNode}");
+            #endif
         }
 
         public void EndBuild()
         {
             #if DEBUG
-            Console.WriteLine($"End Build with data: {buildData}");
+            Console.WriteLine($"End Build with data: {BuildData}");
             #endif
         }
 

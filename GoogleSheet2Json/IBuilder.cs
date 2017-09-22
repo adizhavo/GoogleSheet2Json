@@ -11,6 +11,8 @@
     {
         void StartBuild();
         void SetRootName(string name);
+        void StartProperty();
+        void EndProperty();
         void StartField(string fieldDefintion);
         void EndField();
         void EndBuild();
