@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using GoogleSheet2Json.Generators;
 
 namespace GoogleSheet2Json
@@ -28,7 +29,11 @@ namespace GoogleSheet2Json
             lexer.Lex(sheet2Json.dataKeys[0], sheet2Json.dataValues, argumentReader.exportConfig);
             generator.Generate(builder.BuildData, argumentReader.exportConfig);
             
-            Console.WriteLine(generator.GeneratedFile);
+            StreamWriter file = new StreamWriter(configReader.appConfig.outputDirectory + argumentReader.exportConfig.outputFileName);
+            using (file)
+            {
+                file.WriteLine(generator.GeneratedContent);
+            }
         }
     }
 }
