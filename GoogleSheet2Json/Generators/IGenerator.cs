@@ -2,7 +2,7 @@
 {
     public interface IGenerator
     {
-        string GeneratedFile { get; }
+        string GeneratedContent { get; }
         void Generate(Data buildData, ExportConfig exportConfig);
     }
 }
