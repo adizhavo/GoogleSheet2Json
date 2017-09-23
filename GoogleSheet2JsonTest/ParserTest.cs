@@ -18,7 +18,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void ParseSetupTest()
         {
-            parser.Start();
+            parser.StartArrayOfObjects();
             parser.Name("root");
             parser.StartProperty();
             parser.EndProperty();
@@ -30,7 +30,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void ParsePropertyDefinitionTest()
         {
-            parser.Start();
+            parser.StartArrayOfObjects();
             parser.Name("root");
             parser.StartProperty();
             parser.StartField();
@@ -45,7 +45,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void ParsePropertyValueTest()
         {
-            parser.Start();
+            parser.StartArrayOfObjects();
             parser.Name("root");
             parser.StartProperty();
             parser.StartField();
@@ -61,7 +61,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void ParsePropertyValueWithSymbolsTest()
         {
-            parser.Start();
+            parser.StartArrayOfObjects();
             parser.Name("root");
             parser.StartProperty();
             parser.StartField();
@@ -83,7 +83,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void ParsePropertyRangeTest()
         {
-            parser.Start();
+            parser.StartArrayOfObjects();
             parser.Name("root");
             parser.StartProperty();
             parser.StartField();
@@ -101,7 +101,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void ParsePropertyCollectionTest()
         {
-            parser.Start();
+            parser.StartArrayOfObjects();
             parser.Name("root");
             parser.StartProperty();
             parser.StartField();
@@ -121,7 +121,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void ParsePropertyMapTest()
         {
-            parser.Start();
+            parser.StartArrayOfObjects();
             parser.Name("root");
             parser.StartProperty();
             parser.StartField();
@@ -141,7 +141,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void ParsePropertyArrayOfMapTest()
         {
-            parser.Start();
+            parser.StartArrayOfObjects();
             parser.Name("root");
             parser.StartProperty();
             parser.StartField();
@@ -163,11 +163,46 @@ namespace GoogleSheet2JsonTest
             Assert.AreEqual("s rn s_p sp sm ak av sm ak av ep e_p eb", mockBuilder.buildPrint);
         }
 
+        [Test]
+        public void ParseSingleObjectTest()
+        {
+            parser.StartSingleObject();
+            parser.StartField();
+            parser.Name("field definition");
+            parser.Name("field value");
+            parser.EndField();
+            parser.End();
+            
+            Assert.AreEqual("s_o sp f ep eb", mockBuilder.buildPrint);
+        }
+        
+        [Test]
+        public void ParseSingleObjectWithMultipleFieldsTest()
+        {
+            parser.StartSingleObject();
+            parser.StartField();
+            parser.Name("field definition 1");
+            parser.Name("field value 1");
+            parser.EndField();
+            parser.StartField();
+            parser.Name("field definition 2");
+            parser.Name("field value 2");
+            parser.EndField();
+            parser.End();
+            
+            Assert.AreEqual("s_o sp f ep sp f ep eb", mockBuilder.buildPrint);
+        }
+
         public class MockBuilder : IBuilder
         {
             public string buildPrint = string.Empty;
+
+            public void StartBuildSingleObject()
+            {
+                buildPrint += "s_o";
+            }
             
-            public void StartBuild()
+            public void StartBuildArrayOfObjects()
             {
                 buildPrint += "s";
             }

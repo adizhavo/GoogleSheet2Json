@@ -17,7 +17,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void FieldContainesOnlyTextTest()
         {
-            builder.StartBuild();
+            builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
             builder.SetField("some value");
@@ -30,7 +30,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void FieldContainesMapTest()
         {
-            builder.StartBuild();
+            builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
             builder.StartMap();    
@@ -45,7 +45,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void FieldContainesArrayOfMapsTest()
         {
-            builder.StartBuild();
+            builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
             
@@ -66,7 +66,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void FieldContainesCollectionTest()
         {
-            builder.StartBuild();
+            builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
             
@@ -85,7 +85,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void FieldContainesRangeOnlyOfNumericVariablesTest()
         {
-            builder.StartBuild();
+            builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
             
@@ -102,7 +102,7 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void FieldContainesTextIfTryToAddNotNumericRangeTest()
         {
-            builder.StartBuild();
+            builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
             
