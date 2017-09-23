@@ -11,6 +11,11 @@ namespace GoogleSheet2Json
         public string userName;
         public string clientSecret;
         public string outputDirectory;
+
+        public override string ToString()
+        {
+            return $"[AppConfig] applicationName: {applicationName}, spreadSheetID: {spreadSheetId}, userName: {userName}, clientSecret: {clientSecret}, outputDirectory: {outputDirectory}";
+        }
     }
 
     public class ConfigReader
@@ -32,6 +37,10 @@ namespace GoogleSheet2Json
                 {
                     appConfig.outputDirectory = exportConfig.outputDir;
                 }
+
+                #if DEBUG
+                Console.WriteLine($"[ConfigReader] Start app with config {appConfig}");
+                #endif
             }
         }
     }

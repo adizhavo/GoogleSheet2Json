@@ -35,6 +35,10 @@ namespace GoogleSheet2Json
                     SetOutputPath(command, variables);
                 }
             }
+
+            #if DEBUG
+            Console.WriteLine($"[ArgumentReader] arguments setup: {exportConfig}");      
+            #endif
         }
 
         private void CheckForArrayOrSingleObject(string command)
@@ -115,6 +119,11 @@ namespace GoogleSheet2Json
             isArrayOfObjects = true;
             configPath = string.Empty;
             outputDir = string.Empty;
+        }
+
+        public override string ToString()
+        {
+            return $"literalKeys: {literalKeys.Count}, isArray: {isArrayOfObjects}, isSingle: {isSingleObject}, sheetTab: {sheetTab}, keyRange: {keyRange}, valueRange: {valueRange}, configPath: {configPath}, outputDir: {outputDir}";
         }
     }
 }
