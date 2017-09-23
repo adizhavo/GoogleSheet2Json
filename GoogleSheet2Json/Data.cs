@@ -23,11 +23,21 @@ namespace GoogleSheet2Json
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"[DATA] {root}");
             
-            foreach(var property in properties) 
-                stringBuilder.Append(property + "\n");
-
+            if (isSingleObject)
+            {
+                stringBuilder.Append($"[DATA] is single object ");
+                foreach(var field in fields) 
+                    stringBuilder.Append(field + "\n");
+            }
+            else if (isArrayOfObjects)
+            {
+               
+                stringBuilder.Append($"[DATA] {root}");
+                foreach(var property in properties) 
+                    stringBuilder.Append(property + "\n");
+            }
+            
             return stringBuilder.ToString();
         }
     }
