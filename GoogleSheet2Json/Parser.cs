@@ -111,7 +111,8 @@ namespace GoogleSheet2Json
             {
                 new Transition(ParserState.START,            ParserEvent.OBJECT,             ParserState.OBJECT,               builder.StartBuildSingleObject),
                 new Transition(ParserState.START,            ParserEvent.ARRAY,              ParserState.ARRAY,                builder.StartBuildArrayOfObjects),
-                
+                new Transition(ParserState.OBJECT,           ParserEvent.END,                ParserState.END,                  builder.EndBuild),
+                new Transition(ParserState.ARRAY,            ParserEvent.END,                ParserState.END,                  builder.EndBuild),
                 // Specific case for the Object state
                 new Transition(ParserState.OBJECT,           ParserEvent.START_FIELD,        ParserState.FIELD_DEF,            null),
                 
