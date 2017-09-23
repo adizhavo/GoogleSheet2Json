@@ -7,15 +7,19 @@ namespace GoogleSheet2Json
     {
         private static void Main(string[] args)
         {
+            // read arguments
             var argumentReader = new ArgumentReader();
             argumentReader.Parse(args);
             
+            // setup the app config
             var configReader = new ConfigReader();
             configReader.Initialise(argumentReader.exportConfig);
             
-            var sheet2Json = new GoogleSheet2Json();
-            sheet2Json.ReadDataFromSheet();
+            // extract data from sheets
+            var sheet2Json = new GoogleSheet2Json(configReader.appConfig);
+            sheet2Json.ReadDataFromSheet(argumentReader.exportConfig);
            
+            // setup compilation process
             var builder = new Builder();
             var parser = new Parser(builder);
             var lexer = new Lexer(parser);

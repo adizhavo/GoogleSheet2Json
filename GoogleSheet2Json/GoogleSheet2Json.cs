@@ -18,21 +18,15 @@ namespace GoogleSheet2Json
     {
         public IList<IList<object>> dataKeys { private set; get; }
         public IList<IList<object>> dataValues { private set; get; }
-
-        // TODO : read these values from a config file in Json and CLI arguments
+        
         private static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
-        private static string ApplicationName = "GoogleSheet2Json";
-        private static string spreadSheetId = "1PnKZzMfM762HAWQBUMWxO0TNIEG3RZEGI_0rKm47x0U";
-        private static string userName = "Adi Zhavo";
-        private static string clientSecret = "client_secret.json";
-        private static string keyRange = "A1:K";
-        private static string valueRange = "A2:K";
-        private static string tabName = "SAMPLE_1";
-
         private SheetsService service;
-
-        public GoogleSheet2Json()
+        private AppConfig appConfig;
+        
+        public GoogleSheet2Json(AppConfig appConfig)
         {
+            this.appConfig = appConfig;
+            
             // Load credentials
             var credential = CreateUserCredentials(); 
 
@@ -40,14 +34,14 @@ namespace GoogleSheet2Json
             service = new SheetsService(new BaseClientService.Initializer()
                 {
                     HttpClientInitializer = credential,
-                    ApplicationName = ApplicationName,
+                    ApplicationName = appConfig.applicationName,
                 });
         }
 
-        public void ReadDataFromSheet()
+        public void ReadDataFromSheet(ExportConfig exportConfig)
         {
-            dataKeys = ExtractDataFromSheet(service, spreadSheetId, tabName, keyRange);
-            dataValues = ExtractDataFromSheet(service, spreadSheetId, tabName, valueRange);
+            dataKeys = ExtractDataFromSheet(service, appConfig.spreadSheetId, exportConfig.sheetTab, exportConfig.keyRange);
+            dataValues = ExtractDataFromSheet(service, appConfig.spreadSheetId, exportConfig.sheetTab, exportConfig.valueRange);
 
             if (dataKeys == null || dataValues == null)
                 throw new Exception("[GoogleSheet2Json] keys or values are null, please check that the inputted data is correct");
@@ -56,11 +50,11 @@ namespace GoogleSheet2Json
         private UserCredential CreateUserCredentials()
         {
             UserCredential credential;
-            using (var stream = new FileStream(clientSecret, FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(appConfig.clientSecret, FileMode.Open, FileAccess.Read))
             {
-                string credPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                string credPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                 credPath = Path.Combine(credPath, ".credentials/sheets.googleapis.com-dotnet.json");
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, Scopes, userName, CancellationToken.None, new FileDataStore(credPath, true)).Result;
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, Scopes, appConfig.userName, CancellationToken.None, new FileDataStore(credPath, true)).Result;
                 Console.WriteLine("[GoogleSheet2Json] Credential file saved to: " + credPath);
             }
             return credential;
