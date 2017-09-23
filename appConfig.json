@@ -1,0 +1,7 @@
+{
+	"applicationName" : "GoogleSheet2Json",
+	"userName" : "your name",
+	"spreadSheetId" : "spread sheet id",
+	"clientSecret" : "put the client id in the application folder, put its relative path here, get the client id from the google developer console",
+	"outputDirectory" : "generated data output directory"
+}
