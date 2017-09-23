@@ -26,6 +26,7 @@ namespace GoogleSheet2JsonTest
             Assert.IsEmpty(argumenReader.exportConfig.sheetTab);
             Assert.IsEmpty(argumenReader.exportConfig.configPath);
             Assert.IsEmpty(argumenReader.exportConfig.outputDir);
+            Assert.AreEqual(argumenReader.exportConfig.outputFileName, "FILE_NAME_NOT_SET");
         }
 
         [Test]
@@ -101,11 +102,20 @@ namespace GoogleSheet2JsonTest
             
             Assert.AreEqual(argumenReader.exportConfig.outputDir, "/Sample/Path");
         }
+        
+        [Test]
+        public void OutputDirFileNameTest()
+        {
+            args = new string[1] { "-outputFileName=FileName" };
+            argumenReader.Parse(args);
+            
+            Assert.AreEqual(argumenReader.exportConfig.outputFileName, "FileName");
+        }
 
         [Test]
         public void ClITest()
         {
-            args = new string[7]
+            args = new string[8]
             {
                 "-isSingleObject",
                 "-isLiteral=sample_key_1",
@@ -113,7 +123,8 @@ namespace GoogleSheet2JsonTest
                 "-keyRange=A2:Q",
                 "-valueRange=A2:Q",
                 "-configPath=/Sample/Path",
-                "-outputDir=/Sample/Path"
+                "-outputDir=/Sample/Path",
+                "-outputFileName=FileName"
             };
             argumenReader.Parse(args);
             
@@ -125,6 +136,7 @@ namespace GoogleSheet2JsonTest
             Assert.AreEqual(argumenReader.exportConfig.sheetTab, "SAMPLE_TAB");
             Assert.AreEqual(argumenReader.exportConfig.configPath, "/Sample/Path");
             Assert.AreEqual(argumenReader.exportConfig.outputDir, "/Sample/Path");
+            Assert.AreEqual(argumenReader.exportConfig.outputFileName, "FileName");
         }
     }
 }

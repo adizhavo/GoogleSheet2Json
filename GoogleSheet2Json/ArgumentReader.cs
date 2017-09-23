@@ -33,6 +33,7 @@ namespace GoogleSheet2Json
                     SetKeyValueRange(command, variables);
                     SetConfigPath(command, variables);
                     SetOutputPath(command, variables);
+                    SetOutputFileName(command, variables);
                 }
             }
 
@@ -97,6 +98,14 @@ namespace GoogleSheet2Json
                 exportConfig.outputDir = varible;
             }
         }
+        
+        private void SetOutputFileName(string command, string varible)
+        {
+            if (string.Equals(StringConstants.OUTPUT_FILE_NAME_COMMAND, command))
+            {
+                exportConfig.outputFileName = varible;
+            }
+        }
     }
 
     public class ExportConfig
@@ -109,6 +118,7 @@ namespace GoogleSheet2Json
         public string valueRange;
         public string configPath;
         public string outputDir;
+        public string outputFileName;
         
         public ExportConfig()
         {
@@ -119,11 +129,12 @@ namespace GoogleSheet2Json
             isArrayOfObjects = true;
             configPath = string.Empty;
             outputDir = string.Empty;
+            outputFileName = "FILE_NAME_NOT_SET";
         }
 
         public override string ToString()
         {
-            return $"literalKeys: {literalKeys.Count}, isArray: {isArrayOfObjects}, isSingle: {isSingleObject}, sheetTab: {sheetTab}, keyRange: {keyRange}, valueRange: {valueRange}, configPath: {configPath}, outputDir: {outputDir}";
+            return $"literalKeys: {literalKeys.Count}, isArray: {isArrayOfObjects}, isSingle: {isSingleObject}, sheetTab: {sheetTab}, keyRange: {keyRange}, valueRange: {valueRange}, configPath: {configPath}, outputDir: {outputDir}, outputFileName: {outputFileName}";
         }
     }
 }

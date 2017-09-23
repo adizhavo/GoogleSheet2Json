@@ -23,6 +23,7 @@
         // Command line commands
         public const string CONFIG_FILE_PATH_COMMAND = "configPath";
         public const string OVERRIDE_OUTPUT_DIR_COMMAND = "outputDir";
+        public const string OUTPUT_FILE_NAME_COMMAND = "outputFileName";
         public const string IS_SINGLE_OBJECT_COMMAND = "isSingleObject";
         public const string IS_LITERAL_KEY_COMMAND = "isLiteral";
         public const string SHEET_TAB_COMMAND = "sheetTab";
