@@ -160,7 +160,7 @@ namespace GoogleSheet2JsonTest
             parser.EndProperty();
             parser.End();
             
-            Assert.AreEqual("s rn s_p sp sm ak av ak av ep e_p eb", mockBuilder.buildPrint);
+            Assert.AreEqual("s rn s_p sp sm ak av sm ak av ep e_p eb", mockBuilder.buildPrint);
         }
 
         public class MockBuilder : IBuilder
