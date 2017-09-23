@@ -19,8 +19,14 @@ namespace GoogleSheet2Json
             BuildData = new Data();
         }
 
-        public void StartBuild()
+        public void StartBuildSingleObject()
         {
+            BuildData.isSingleObject = true;
+        }
+        
+        public void StartBuildArrayOfObjects()
+        {
+            BuildData.isArrayOfObjects = true;
             BuildData.root = string.Empty;
             BuildData.properties.Clear();
         }
@@ -54,7 +60,14 @@ namespace GoogleSheet2Json
 
         public void EndField()
         {
-            propertyNode.fields.Add(fieldNode);
+            if (BuildData.isArrayOfObjects)
+            {
+                propertyNode.fields.Add(fieldNode);    
+            }
+            else if (BuildData.isSingleObject)
+            {
+                BuildData.fields.Add(fieldNode);
+            }
             
             #if DEBUG
             Console.WriteLine($"End field with data: {fieldNode}");

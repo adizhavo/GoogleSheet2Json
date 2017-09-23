@@ -20,7 +20,14 @@ namespace GoogleSheet2Json
             BuildTransitionTable();
         }
 
-        public void Start()
+        public void StartSingleObject()
+        {
+            currentState = ParserState.START;
+            setName = string.Empty;
+            HandleEvent(ParserEvent.OBJECT);
+        }
+        
+        public void StartArrayOfObjects()
         {
             currentState = ParserState.START;
             setName = string.Empty;
@@ -102,7 +109,11 @@ namespace GoogleSheet2Json
             
             transitions = new Transition[]
             {
-                new Transition(ParserState.START,            ParserEvent.ARRAY,              ParserState.ARRAY,                builder.StartBuild),
+                new Transition(ParserState.START,            ParserEvent.OBJECT,             ParserState.OBJECT,               builder.StartBuildSingleObject),
+                new Transition(ParserState.START,            ParserEvent.ARRAY,              ParserState.ARRAY,                builder.StartBuildArrayOfObjects),
+                
+                // Specific case for the Object state
+                new Transition(ParserState.OBJECT,           ParserEvent.START_FIELD,        ParserState.FIELD_DEF,            null),
                 
                 // Specific case for the Array State
                 new Transition(ParserState.ARRAY,            ParserEvent.SET_NAME,           ParserState.ARR_PROP_DEF,         () => builder.SetRootName(setName)),
@@ -110,6 +121,7 @@ namespace GoogleSheet2Json
                 new Transition(ParserState.FIELD_DEF,        ParserEvent.START_FIELD,        ParserState.FIELD_DEF,            null), 
                 new Transition(ParserState.FIELD_DEF,        ParserEvent.SET_NAME,           ParserState.FIELD,                () => builder.StartField(setName)),
                 new Transition(ParserState.FIELD_DEF,        ParserEvent.END_PROP,           ParserState.ARR_PROP_DEF,         builder.EndProperty),
+                new Transition(ParserState.FIELD_DEF,        ParserEvent.END,                ParserState.END,                  builder.EndBuild),
                 new Transition(ParserState.ARR_PROP_DEF,     ParserEvent.END,                ParserState.END,                  builder.EndBuild),
                 new Transition(ParserState.FIELD,            ParserEvent.END_FIELD,          ParserState.FIELD_DEF,            builder.EndField),
                 

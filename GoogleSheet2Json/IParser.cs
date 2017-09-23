@@ -11,7 +11,8 @@ namespace GoogleSheet2Json
 
     public interface IParser
     {
-        void Start();
+        void StartSingleObject();
+        void StartArrayOfObjects();
         void End();
         void Name(string name);
         void StartProperty();
@@ -50,6 +51,8 @@ namespace GoogleSheet2Json
     public enum ParserState
     {
         START,
+        OBJECT,
+        OBJECT_PROP_START,
         ARRAY,
         ARR_PROP_START,
         PROP_END,

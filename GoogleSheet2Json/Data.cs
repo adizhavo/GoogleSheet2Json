@@ -11,6 +11,12 @@ namespace GoogleSheet2Json
 
     public class Data
     {
+        // properties for the single object export
+        public bool isSingleObject;
+        public List<FieldNode> fields = new List<FieldNode>();
+
+        // properties for exporting an array of objects
+        public bool isArrayOfObjects;
         public string root;
         public List<PropertyNode> properties = new List<PropertyNode>();
         
