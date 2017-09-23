@@ -26,7 +26,7 @@ namespace GoogleSheet2Json
             var generator = new JsonGenerator();
             
             lexer.Lex(sheet2Json.dataKeys[0], sheet2Json.dataValues, argumentReader.exportConfig);
-            generator.Generate(builder.BuildData);
+            generator.Generate(builder.BuildData, argumentReader.exportConfig);
             
             Console.WriteLine(generator.GeneratedFile);
         }

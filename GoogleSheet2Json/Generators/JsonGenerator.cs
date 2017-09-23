@@ -13,22 +13,39 @@ namespace GoogleSheet2Json.Generators
         public const string CLOSE_SQUARE_BRAC = "]";
         public const string OPEN_BRAC = "{";
         public const string CLOSE_BRAC = "}";
+       
+        public void Generate(Data buildData, ExportConfig exportConfig)
+        {
+            if (exportConfig.isArrayOfObjects)
+            {
+                GenerateArrayOfObjects(buildData);                
+            }
+            else if (exportConfig.isSingleObject)
+            {
+                GenerateSingleObject(buildData);
+            }
+        }
+
+        private void GenerateSingleObject(Data buildData)
+        {
+            GenerateFields(buildData.fields);
+        }
         
-        public void Generate(Data buildData)
+        private void GenerateArrayOfObjects(Data buildData)
         {
             GeneratedFile = OPEN_BRAC;
             GeneratedFile += QUOTE;
             GeneratedFile += buildData.root;
             GeneratedFile += QUOTE + COLON + OPEN_SQUARE_BRAC;
-            
-            for (int i = 0; i < buildData.properties.Count; i ++)
+
+            for (int i = 0; i < buildData.properties.Count; i++)
             {
                 GenerateFields(buildData.properties[i].fields);
-                
+
                 if (i < buildData.properties.Count - 1)
                     GeneratedFile += COMMA;
             }
-            
+
             GeneratedFile += CLOSE_SQUARE_BRAC + CLOSE_BRAC;
         }
 
