@@ -56,23 +56,34 @@ namespace GoogleSheet2Json
 
             for (int i = 0; i < propDefinition.Count; i++)
             {
-                var key = propDefinition[i];
+                var key = propDefinition[i].ToString().Trim();
                 var value = propValues[i];
-                
-                parser.StartField();
-                
-                LexKey(key.ToString());
 
-                if (exportConfig.literalKeys.Contains(key.ToString()))
+                if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
                 {
-                    parser.Name(value.ToString());
+                    #if DEBUG
+                    Console.WriteLine($"Lexing data with key: {key} and value: {value}");
+                    #endif
+                    
+                    parser.StartField();
+
+                    LexKey(key);
+
+                    if (exportConfig.literalKeys.Contains(key))
+                    {
+                        parser.Name(value.ToString());
+                    }
+                    else
+                    {
+                        LexValue(value.ToString());
+                    }
+                    
+                    parser.EndField();
+                    
+                    #if DEBUG
+                    Console.WriteLine("Data lexed successfully.");
+                    #endif
                 }
-                else
-                {
-                    LexValue(value.ToString());   
-                }
-                
-                parser.EndField();
             }
 
             parser.End();
@@ -94,7 +105,7 @@ namespace GoogleSheet2Json
                     {
                         if (i < values.Count)
                         {
-                            var key = keys[i];
+                            var key = keys[i].ToString().Trim();
                             var value = values[i];
 
                             if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
@@ -105,9 +116,9 @@ namespace GoogleSheet2Json
                                 
                                 parser.StartField();
 
-                                LexKey(key.ToString());
+                                LexKey(key);
 
-                                if (exportConfig.literalKeys.Contains(key.ToString()))
+                                if (exportConfig.literalKeys.Contains(key))
                                 {
                                     parser.Name(value.ToString());
                                 }
@@ -119,7 +130,7 @@ namespace GoogleSheet2Json
                                 parser.EndField();
 
                                 #if DEBUG
-                                Console.WriteLine($"Data lexed successfully.");
+                                Console.WriteLine("Data lexed successfully.");
                                 #endif
                             }
                         }
