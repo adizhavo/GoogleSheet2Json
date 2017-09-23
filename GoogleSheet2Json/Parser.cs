@@ -162,7 +162,7 @@ namespace GoogleSheet2Json
                 new Transition(ParserState.FIELD_MAP_VALUE,  ParserEvent.CLOSE_SQUARE_BRACE, ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.CLOSE_SQUARE_BRACKET)),
                 new Transition(ParserState.FIELD_MAP_VALUE,  ParserEvent.SET_NAME,           ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(setName)),
                 new Transition(ParserState.FIELD_MAP,        ParserEvent.END_FIELD,          ParserState.FIELD_DEF,            builder.EndField),
-                new Transition(ParserState.FIELD_MAP,        ParserEvent.OPEN_BRACE,         ParserState.FIELD_MAP_KEY,        null)
+                new Transition(ParserState.FIELD_MAP,        ParserEvent.OPEN_BRACE,         ParserState.FIELD_MAP_KEY,        builder.StartMap)
             };
         }
         
