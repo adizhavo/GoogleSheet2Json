@@ -24,6 +24,8 @@ namespace GoogleSheet2JsonTest
             Assert.IsEmpty(argumenReader.exportConfig.keyRange);
             Assert.IsEmpty(argumenReader.exportConfig.valueRange);
             Assert.IsEmpty(argumenReader.exportConfig.sheetTab);
+            Assert.IsEmpty(argumenReader.exportConfig.configPath);
+            Assert.IsEmpty(argumenReader.exportConfig.outputDir);
         }
 
         [Test]
@@ -83,15 +85,35 @@ namespace GoogleSheet2JsonTest
         }
 
         [Test]
+        public void ConfigPathTest()
+        {
+            args = new string[1] { "-configPath=/Sample/Path" };
+            argumenReader.Parse(args);
+            
+            Assert.AreEqual(argumenReader.exportConfig.configPath, "/Sample/Path");
+        }
+        
+        [Test]
+        public void OutputDirPathTest()
+        {
+            args = new string[1] { "-outputDir=/Sample/Path" };
+            argumenReader.Parse(args);
+            
+            Assert.AreEqual(argumenReader.exportConfig.outputDir, "/Sample/Path");
+        }
+
+        [Test]
         public void ClITest()
         {
-            args = new string[5]
+            args = new string[7]
             {
                 "-isSingleObject",
                 "-isLiteral=sample_key_1",
                 "-sheetTab=SAMPLE_TAB",
                 "-keyRange=A2:Q",
-                "-valueRange=A2:Q"
+                "-valueRange=A2:Q",
+                "-configPath=/Sample/Path",
+                "-outputDir=/Sample/Path"
             };
             argumenReader.Parse(args);
             
@@ -101,6 +123,8 @@ namespace GoogleSheet2JsonTest
             Assert.AreEqual(argumenReader.exportConfig.valueRange, "A2:Q");
             Assert.AreEqual(argumenReader.exportConfig.keyRange, "A2:Q");
             Assert.AreEqual(argumenReader.exportConfig.sheetTab, "SAMPLE_TAB");
+            Assert.AreEqual(argumenReader.exportConfig.configPath, "/Sample/Path");
+            Assert.AreEqual(argumenReader.exportConfig.outputDir, "/Sample/Path");
         }
     }
 }
