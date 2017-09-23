@@ -10,6 +10,9 @@ namespace GoogleSheet2Json
             var argumentReader = new ArgumentReader();
             argumentReader.Parse(args);
             
+            var configReader = new ConfigReader();
+            configReader.Initialise(argumentReader.exportConfig);
+            
             var sheet2Json = new GoogleSheet2Json();
             sheet2Json.ReadDataFromSheet();
            

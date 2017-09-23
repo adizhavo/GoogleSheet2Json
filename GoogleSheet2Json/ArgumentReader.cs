@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GoogleSheet2Json
 {
@@ -30,6 +31,8 @@ namespace GoogleSheet2Json
                     AddLiteratKeys(command, variables);
                     SetSheetTab(command, variables);
                     SetKeyValueRange(command, variables);
+                    SetConfigPath(command, variables);
+                    SetOutputPath(command, variables);
                 }
             }
         }
@@ -74,6 +77,22 @@ namespace GoogleSheet2Json
                 exportConfig.valueRange = variable;
             }
         }
+
+        private void SetConfigPath(string command, string variable)
+        {
+            if (string.Equals(StringConstants.CONFIG_FILE_PATH_COMMAND, command))
+            {
+                exportConfig.configPath = variable;
+            }
+        }
+
+        private void SetOutputPath(string command, string varible)
+        {
+            if (string.Equals(StringConstants.OVERRIDE_OUTPUT_DIR_COMMAND, command))
+            {
+                exportConfig.outputDir = varible;
+            }
+        }
     }
 
     public class ExportConfig
@@ -84,6 +103,8 @@ namespace GoogleSheet2Json
         public string sheetTab;
         public string keyRange;
         public string valueRange;
+        public string configPath;
+        public string outputDir;
         
         public ExportConfig()
         {
@@ -92,6 +113,8 @@ namespace GoogleSheet2Json
             keyRange = string.Empty;
             valueRange = string.Empty;
             isArrayOfObjects = true;
+            configPath = string.Empty;
+            outputDir = string.Empty;
         }
     }
 }

@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="ArgumentReader.cs" />
     <Compile Include="Builder.cs" />
+    <Compile Include="Config\AppConfig.cs" />
     <Compile Include="Config\StringConstants.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Generators\IGenerator.cs" />
