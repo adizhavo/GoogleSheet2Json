@@ -167,11 +167,11 @@ namespace GoogleSheet2Json.Generators
 
         private string TryIfElementIsBoolean(string element)
         {
-            if (element == "TRUE")
+            if (element == StringConstants.TRUE_CHAR)
             {
                 element = "true";
             }
-            else if (element == "FALSE")
+            else if (element == StringConstants.FALSE_CHAR)
             {
                 element = "false";   
             }

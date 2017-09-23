@@ -11,9 +11,6 @@ namespace GoogleSheet2Json
 
     public class Lexer
     {
-        public const string WORD_PATTERN = @"(\w+\s*)*[^( \[* | \]* | \(* | \)* | \>* | \-* | \,* | *)]";
-        public const string EMPTY_SPACE_PATTERN = @"^\s";
-
         private IParser parser;
 
         private int positionInLine = 0;
@@ -25,36 +22,48 @@ namespace GoogleSheet2Json
 
         public void Lex(IList<object> keys, IList<IList<object>> dataValues)
         {
-            parser.Start();
-
-            // define property container
-            parser.Name("root");
-
-            foreach(var values in dataValues)
+            if (keys != null && dataValues != null)
             {
-                parser.StartProperty();
-                
-                for(int i = 0; i < keys.Count; i ++)
+                parser.Start();
+
+                // define property container
+                parser.Name("root");
+
+                foreach (var values in dataValues)
                 {
-                    parser.StartField();
-                    
-                    var key = keys[i];
-                    var value = values[i];
+                    if (values.Count > 0)
+                    {
+                        parser.StartProperty();
 
-                    LexKey(key.ToString());
-                    LexValue(value.ToString());
+                        for (int i = 0; i < keys.Count; i++)
+                        {
+                            if (i < values.Count)
+                            {
+                                var key = keys[i];
+                                var value = values[i];
 
-                    #if DEBUG
-                    Console.WriteLine($"Lexed data with key: {key} and value: {value}\n");
-                    #endif
-                    
-                    parser.EndField();
+                                if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
+                                {
+                                    parser.StartField();
+
+                                    LexKey(key.ToString());
+                                    LexValue(value.ToString());
+
+                                    parser.EndField();
+
+                                    #if DEBUG
+                                    Console.WriteLine($"Lexed data with key: {key} and value: {value}\n");
+                                    #endif
+                                }
+                            }
+                        }
+
+                        parser.EndProperty();
+                    }
                 }
-                
-                parser.EndProperty();
-            }
 
-            parser.End();
+                parser.End();
+            }
         }
 
         private void LexKey(string key)
@@ -90,7 +99,7 @@ namespace GoogleSheet2Json
             if (positionInLine < value.Length)
             {
                 var subString = value.Substring(positionInLine);
-                var regex = Regex.Match(subString, EMPTY_SPACE_PATTERN);
+                var regex = Regex.Match(subString, StringConstants.EMPTY_SPACE_PATTERN);
                 if (regex.Success)
                 {
                     positionInLine += regex.Value.Length;
@@ -115,12 +124,12 @@ namespace GoogleSheet2Json
                 var character = value.Substring(positionInLine, 1);
                 switch (character)
                 {
-                    case "," : parser.Comma(); break;
-                    case ">" : parser.Range(); break;
-                    case "(" : parser.OpenBrace(); break;
-                    case ")" : parser.CloseBrace(); break;
-                    case "[" : parser.OpenSquareBrackets(); break;
-                    case "]" : parser.CloseSquareBrackets(); break;
+                    case StringConstants.COMMA :                parser.Comma(); break;
+                    case StringConstants.RANGE_CHAR :           parser.Range(); break;
+                    case StringConstants.OPEN_BRACKET :         parser.OpenBrace(); break;
+                    case StringConstants.CLOSE_BRACKET :        parser.CloseBrace(); break;
+                    case StringConstants.OPEN_SQUARE_BRACKET :  parser.OpenSquareBrackets(); break;
+                    case StringConstants.CLOSE_SQUARE_BRACKET : parser.CloseSquareBrackets(); break;
                     default  : found = false; break;
                 }
 
@@ -140,7 +149,7 @@ namespace GoogleSheet2Json
             if (positionInLine < value.Length)
             {
                 var subString = value.Substring(positionInLine);
-                var regex = Regex.Match(subString, WORD_PATTERN);
+                var regex = Regex.Match(subString, StringConstants.WORD_PATTERN);
                 if (regex.Success)
                 {
                     parser.Name(regex.Value);

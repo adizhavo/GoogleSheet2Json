@@ -37,7 +37,10 @@ namespace GoogleSheet2Json
 
         public void EndProperty()
         {
-            BuildData.properties.Add(propertyNode);
+            if (propertyNode.fields.Count > 0)
+            {
+                BuildData.properties.Add(propertyNode);
+            }
 
             #if DEBUG
             Console.WriteLine($"End property with fields: {propertyNode}");
