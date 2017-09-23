@@ -46,7 +46,6 @@ namespace GoogleSheet2Json
 
         public void ReadDataFromSheet()
         {
-            // TODO : support key value pair data definition
             dataKeys = ExtractDataFromSheet(service, spreadSheetId, tabName, keyRange);
             dataValues = ExtractDataFromSheet(service, spreadSheetId, tabName, valueRange);
 

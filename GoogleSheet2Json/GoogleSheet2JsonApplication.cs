@@ -7,9 +7,12 @@ namespace GoogleSheet2Json
     {
         private static void Main(string[] args)
         {
+            var argumentReader = new ArgumentReader();
+            argumentReader.Parse(args);
+            
             var sheet2Json = new GoogleSheet2Json();
             sheet2Json.ReadDataFromSheet();
-            
+           
             var builder = new Builder();
             var parser = new Parser(builder);
             var lexer = new Lexer(parser);

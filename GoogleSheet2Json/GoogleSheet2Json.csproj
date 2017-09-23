@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentReader.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Generators\IGenerator.cs" />
