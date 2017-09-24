@@ -48,9 +48,7 @@ namespace GoogleSheet2Json
                 BuildData.properties.Add(propertyNode);
             }
 
-            #if DEBUG
-            Console.WriteLine($"End property with fields: {propertyNode}");
-            #endif
+            Logger.DebugLogLine($"End property with fields: {propertyNode}");            
         }
 
         public void StartField(string fieldDefintion)
@@ -68,22 +66,18 @@ namespace GoogleSheet2Json
             {
                 BuildData.fields.Add(fieldNode);
             }
-            
-            #if DEBUG
-            Console.WriteLine($"End field with data: {fieldNode}");
-            #endif
-        }
-
-        public void EndBuild()
-        {
-            #if DEBUG
-            Console.WriteLine($"End Build with data: {BuildData}");
-            #endif
+           
+            Logger.DebugLogLine($"End field with data: {fieldNode}");
         }
 
         public void SetField(string name)
         {
             fieldNode.fieldValue += name;
+        }
+
+        public void EndBuild()
+        {
+            Logger.DebugLogLine($"End Build with data: {BuildData}");
         }
 
         public void TryAddMinRange(string divider)

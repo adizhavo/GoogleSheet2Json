@@ -10,9 +10,12 @@ namespace GoogleSheet2Json
     public class ArgumentReader
     {
         public ExportConfig exportConfig { get; }
+
+        private bool checkErrors;
         
-        public ArgumentReader()
+        public ArgumentReader(bool checkErrors = true)
         {
+            this.checkErrors = checkErrors;
             exportConfig = new ExportConfig();
         }
         
@@ -36,10 +39,12 @@ namespace GoogleSheet2Json
                     SetOutputFileName(command, variables);
                 }
             }
-
-            #if DEBUG
-            Console.WriteLine($"[ArgumentReader] arguments setup: {exportConfig}");      
-            #endif
+            
+            Logger.DebugLogLine($"[ArgumentReader] arguments setup: {exportConfig}");
+            if (checkErrors && CheckForErrors())
+            {
+                throw new Exception("[ArgumentReader] please fix the errors above");
+            }
         }
 
         private void CheckForArrayOrSingleObject(string command)
@@ -105,6 +110,40 @@ namespace GoogleSheet2Json
             {
                 exportConfig.outputFileName = varible;
             }
+        }
+
+        private bool CheckForErrors()
+        {
+            if (string.IsNullOrEmpty(exportConfig.configPath))
+            {
+                Logger.LogLine($"App config path is empty, please use -{StringConstants.CONFIG_FILE_PATH_COMMAND} command", Logger.LogType.Error);
+                return true;
+            }
+            
+            if (string.IsNullOrEmpty(exportConfig.sheetTab))
+            {
+                Logger.LogLine($"Sheet tab is empty, please use -{StringConstants.SHEET_TAB_COMMAND} command", Logger.LogType.Error);
+                return true;
+            }
+
+            if (string.IsNullOrEmpty(exportConfig.keyRange))
+            {
+                Logger.LogLine($"Key range is empty, please use -{StringConstants.KEY_RANGE_COMMAND} command", Logger.LogType.Error);
+                return true;
+            }
+            
+            if (string.IsNullOrEmpty(exportConfig.valueRange))
+            {
+                Logger.LogLine($"Value range is empty, please use -{StringConstants.VALUE_RANGE_COMMAND} command", Logger.LogType.Error);
+                return true;
+            }
+            
+            if (string.Equals(exportConfig.outputFileName, "FILE_NAME_NOT_SET"))
+            {
+                Logger.LogLine($"File name not set, please use -{StringConstants.OUTPUT_FILE_NAME_COMMAND} command, will set to FILE_NAME_NOT_SET as default", Logger.LogType.Warning);
+            }
+
+            return false;
         }
     }
 

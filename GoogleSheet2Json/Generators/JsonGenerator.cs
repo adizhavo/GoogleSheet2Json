@@ -24,6 +24,8 @@ namespace GoogleSheet2Json.Generators
             {
                 GenerateSingleObject(buildData);
             }
+            
+            Logger.LogLine($"Generated content: \n{GeneratedContent}");
         }
 
         private void GenerateSingleObject(Data buildData)

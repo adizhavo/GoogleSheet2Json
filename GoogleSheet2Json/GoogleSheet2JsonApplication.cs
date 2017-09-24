@@ -34,6 +34,8 @@ namespace GoogleSheet2Json
             {
                 file.WriteLine(generator.GeneratedContent);
             }
+            
+            Logger.LogLine($"Write file with name: {argumentReader.exportConfig.outputFileName} in the directory: {configReader.appConfig.outputDirectory}");
         }
     }
 }

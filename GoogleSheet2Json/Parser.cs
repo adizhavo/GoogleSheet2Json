@@ -12,7 +12,7 @@ namespace GoogleSheet2Json
         public ParserState currentState { get; private set; }
 
         private string setName;
-        private IBuilder builder;
+        private readonly IBuilder builder;
 
         public Parser(IBuilder builder)
         {
@@ -107,7 +107,7 @@ namespace GoogleSheet2Json
             // TODO : state transitions can be improved, this is the first version and may have some edge cases
             // tests are covering most of the usage of the parser, please report any error
             
-            transitions = new Transition[]
+            transitions = new[]
             {
                 new Transition(ParserState.START,            ParserEvent.OBJECT,             ParserState.OBJECT,               builder.StartBuildSingleObject),
                 new Transition(ParserState.START,            ParserEvent.ARRAY,              ParserState.ARRAY,                builder.StartBuildArrayOfObjects),
@@ -186,15 +186,9 @@ namespace GoogleSheet2Json
             {
                 if (transition.state.Equals(currentState) && transition.pEvent.Equals(pEvent))
                 {
-                    if (transition.action != null)
-                        transition.action();
-
-                    #if DEBUG
-                    Console.WriteLine($"[Parser] Change state from: {currentState} to: {transition.nextState} from event: {pEvent}");
-                    #endif
-
+                    transition.action?.Invoke();
+                    Logger.DebugLogLine($"[Parser] Change state from: {currentState} to: {transition.nextState} from event: {pEvent}");
                     currentState = transition.nextState;
-
                     return;
                 }
             }

@@ -38,9 +38,7 @@ namespace GoogleSheet2Json
                     appConfig.outputDirectory = exportConfig.outputDir;
                 }
 
-                #if DEBUG
-                Console.WriteLine($"[ConfigReader] Start app with config {appConfig}");
-                #endif
+                Logger.DebugLogLine($"[ConfigReader] Start app with config {appConfig}");
             }
         }
     }

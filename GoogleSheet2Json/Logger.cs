@@ -14,7 +14,7 @@ namespace GoogleSheet2Json
         
         private static readonly Dictionary<LogType, ConsoleColor> logColors = new Dictionary<LogType, ConsoleColor>()
         {
-            { LogType.Info,    ConsoleColor.White },
+            { LogType.Info,    ConsoleColor.DarkGreen },
             { LogType.Warning, ConsoleColor.Yellow },
             { LogType.Error,   ConsoleColor.Red }
         };
