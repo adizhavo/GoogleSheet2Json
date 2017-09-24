@@ -4,7 +4,7 @@ namespace GoogleSheet2Json.Generators
 {
     public class JsonGenerator : IGenerator
     {
-        public string GeneratedFile { get; private set; }
+        public string GeneratedContent { get; private set; }
 
         public const string QUOTE = "\"";
         public const string COLON = ":";
@@ -13,33 +13,50 @@ namespace GoogleSheet2Json.Generators
         public const string CLOSE_SQUARE_BRAC = "]";
         public const string OPEN_BRAC = "{";
         public const string CLOSE_BRAC = "}";
-        
-        public void Generate(Data buildData)
+       
+        public void Generate(Data buildData, ExportConfig exportConfig)
         {
-            GeneratedFile = OPEN_BRAC;
-            GeneratedFile += QUOTE;
-            GeneratedFile += buildData.root;
-            GeneratedFile += QUOTE + COLON + OPEN_SQUARE_BRAC;
-            
-            for (int i = 0; i < buildData.properties.Count; i ++)
+            if (exportConfig.isArrayOfObjects)
+            {
+                GenerateArrayOfObjects(buildData);                
+            }
+            else if (exportConfig.isSingleObject)
+            {
+                GenerateSingleObject(buildData);
+            }
+        }
+
+        private void GenerateSingleObject(Data buildData)
+        {
+            GenerateFields(buildData.fields);
+        }
+        
+        private void GenerateArrayOfObjects(Data buildData)
+        {
+            GeneratedContent = OPEN_BRAC;
+            GeneratedContent += QUOTE;
+            GeneratedContent += buildData.root;
+            GeneratedContent += QUOTE + COLON + OPEN_SQUARE_BRAC;
+
+            for (int i = 0; i < buildData.properties.Count; i++)
             {
                 GenerateFields(buildData.properties[i].fields);
-                
+
                 if (i < buildData.properties.Count - 1)
-                    GeneratedFile += COMMA;
+                    GeneratedContent += COMMA;
             }
-            
-            GeneratedFile += CLOSE_SQUARE_BRAC + CLOSE_BRAC;
+
+            GeneratedContent += CLOSE_SQUARE_BRAC + CLOSE_BRAC;
         }
 
         private void GenerateFields(List<FieldNode> fields)
         {
-            GeneratedFile += OPEN_BRAC;
+            GeneratedContent += OPEN_BRAC;
             
             for (int i = 0; i < fields.Count; i ++)
             {
                 var property = fields[i];
-                GeneratedFile += QUOTE + property.definition + QUOTE + COLON;
+                GeneratedContent += QUOTE + property.definition + QUOTE + COLON;
 
                 if (property.isRange)
                 {
@@ -63,26 +80,26 @@ namespace GoogleSheet2Json.Generators
                 }
                 
                 if (i < fields.Count - 1)
-                    GeneratedFile += COMMA;
+                    GeneratedContent += COMMA;
             }
             
-            GeneratedFile += CLOSE_BRAC;
+            GeneratedContent += CLOSE_BRAC;
         }
 
         private void BuildField(string element)
         {
             var isString = IsStringValue(element);
 
-            if (isString) GeneratedFile += QUOTE;
+            if (isString) GeneratedContent += QUOTE;
 
-            GeneratedFile += TryIfElementIsBoolean(element);
+            GeneratedContent += TryIfElementIsBoolean(element);
 
-            if (isString) GeneratedFile += QUOTE;
+            if (isString) GeneratedContent += QUOTE;
         }
 
         private void BuildArrayOfMAps(List<string> keys, List<string> values)
         {
-            GeneratedFile += OPEN_SQUARE_BRAC;
+            GeneratedContent += OPEN_SQUARE_BRAC;
 
             for (int j = 0; j < keys.Count; j++)
             {
@@ -92,64 +109,64 @@ namespace GoogleSheet2Json.Generators
                 BuildMap(key, value);
 
                 if (j < keys.Count - 1)
-                    GeneratedFile += COMMA;
+                    GeneratedContent += COMMA;
             }
 
-            GeneratedFile += CLOSE_SQUARE_BRAC;
+            GeneratedContent += CLOSE_SQUARE_BRAC;
         }
 
         // Build range as { "min" : x, "max" : y }
         private void BuildRange(string min, string max)
         {
-            GeneratedFile += OPEN_BRAC + QUOTE + "min" + QUOTE + COLON + min + COMMA + QUOTE + "max" + QUOTE + COLON +
+            GeneratedContent += OPEN_BRAC + QUOTE + "min" + QUOTE + COLON + min + COMMA + QUOTE + "max" + QUOTE + COLON +
                              max + CLOSE_BRAC;
         }
 
         // Build collection as [ x, y, z ]
         private void BuildCollection(List<string> collectionValues)
         {
-            GeneratedFile += OPEN_SQUARE_BRAC;
+            GeneratedContent += OPEN_SQUARE_BRAC;
             for (int j = 0; j < collectionValues.Count; j++)
             {
                 var element = collectionValues[j];
                 var isString = IsStringValue(element);
 
-                if (isString) GeneratedFile += QUOTE;
+                if (isString) GeneratedContent += QUOTE;
 
-                GeneratedFile += TryIfElementIsBoolean(element);
+                GeneratedContent += TryIfElementIsBoolean(element);
 
-                if (isString) GeneratedFile += QUOTE;
+                if (isString) GeneratedContent += QUOTE;
 
                 if (j < collectionValues.Count - 1)
-                    GeneratedFile += COMMA;
+                    GeneratedContent += COMMA;
             }
-            GeneratedFile += CLOSE_SQUARE_BRAC;
+            GeneratedContent += CLOSE_SQUARE_BRAC;
         }
 
         // Build map as { "key" : x, "value" : y }
         private void BuildMap(string key, string value)
         {
-            GeneratedFile += OPEN_BRAC + QUOTE + "key" + QUOTE + COLON;
+            GeneratedContent += OPEN_BRAC + QUOTE + "key" + QUOTE + COLON;
 
             var isString = IsStringValue(key);
 
-            if (isString) GeneratedFile += QUOTE;
+            if (isString) GeneratedContent += QUOTE;
 
-            GeneratedFile += key;
+            GeneratedContent += key;
 
-            if (isString) GeneratedFile += QUOTE;
+            if (isString) GeneratedContent += QUOTE;
 
-            GeneratedFile += COMMA + QUOTE + "value" + QUOTE + COLON;
+            GeneratedContent += COMMA + QUOTE + "value" + QUOTE + COLON;
 
             isString = IsStringValue(value);
 
-            if (isString) GeneratedFile += QUOTE;
+            if (isString) GeneratedContent += QUOTE;
 
-            GeneratedFile += TryIfElementIsBoolean(value);
+            GeneratedContent += TryIfElementIsBoolean(value);
 
-            if (isString) GeneratedFile += QUOTE;
+            if (isString) GeneratedContent += QUOTE;
 
-            GeneratedFile += CLOSE_BRAC;
+            GeneratedContent += CLOSE_BRAC;
         }
 
         private bool IsStringValue(string value)

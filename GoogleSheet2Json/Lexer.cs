@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using log4net.Config;
+
 // ReSharper disable EmptyForStatement
 
 namespace GoogleSheet2Json
@@ -20,50 +22,124 @@ namespace GoogleSheet2Json
             this.parser = parser;
         }
 
-        public void Lex(IList<object> keys, IList<IList<object>> dataValues)
+        public void Lex(IList<object> keys, IList<IList<object>> dataValues, ExportConfig exportConfig)
         {
             if (keys != null && dataValues != null)
             {
-                parser.Start();
-
-                // define property container
-                parser.Name("root");
-
-                foreach (var values in dataValues)
+                if (exportConfig.isArrayOfObjects)
                 {
-                    if (values.Count > 0)
+                    LexArrayOfValues(keys, dataValues, exportConfig);     
+                }
+                else if (exportConfig.isSingleObject)
+                {
+                    LexSingleObjectValues(dataValues, exportConfig);
+                }
+            }
+        }
+
+        private void LexSingleObjectValues(IList<IList<object>> dataValues, ExportConfig exportConfig)
+        {
+            parser.StartSingleObject();
+
+            IList<object> propDefinition = new List<object>();
+            IList<object> propValues = new List<object>();
+
+            foreach (var values in dataValues)
+            {
+                // object is only a key value pair between property definition and its value
+                if (values.Count >= 2)
+                {
+                    propDefinition.Add(values[0]);
+                    propValues.Add(values[1]);
+                }
+            }
+
+            for (int i = 0; i < propDefinition.Count; i++)
+            {
+                var key = propDefinition[i].ToString().Trim();
+                var value = propValues[i];
+
+                if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
+                {
+                    #if DEBUG
+                    Console.WriteLine($"Lexing data with key: {key} and value: {value}");
+                    #endif
+                    
+                    parser.StartField();
+
+                    LexKey(key);
+
+                    if (exportConfig.literalKeys.Contains(key))
                     {
-                        parser.StartProperty();
+                        parser.Name(value.ToString());
+                    }
+                    else
+                    {
+                        LexValue(value.ToString());
+                    }
+                    
+                    parser.EndField();
+                    
+                    #if DEBUG
+                    Console.WriteLine("Data lexed successfully.");
+                    #endif
+                }
+            }
 
-                        for (int i = 0; i < keys.Count; i++)
+            parser.End();
+        }
+        
+        private void LexArrayOfValues(IList<object> keys, IList<IList<object>> dataValues, ExportConfig exportConfig)
+        {
+            parser.StartArrayOfObjects();
+            // define property container
+            parser.Name("root");
+
+            foreach (var values in dataValues)
+            {
+                if (values.Count > 0)
+                {
+                    parser.StartProperty();
+
+                    for (int i = 0; i < keys.Count; i++)
+                    {
+                        if (i < values.Count)
                         {
-                            if (i < values.Count)
+                            var key = keys[i].ToString().Trim();
+                            var value = values[i];
+
+                            if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
                             {
-                                var key = keys[i];
-                                var value = values[i];
+                                #if DEBUG
+                                Console.WriteLine($"Lexing data with key: {key} and value: {value}");
+                                #endif
+                                
+                                parser.StartField();
 
-                                if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
+                                LexKey(key);
+
+                                if (exportConfig.literalKeys.Contains(key))
                                 {
-                                    parser.StartField();
-
-                                    LexKey(key.ToString());
-                                    LexValue(value.ToString());
-
-                                    parser.EndField();
-
-                                    #if DEBUG
-                                    Console.WriteLine($"Lexed data with key: {key} and value: {value}\n");
-                                    #endif
+                                    parser.Name(value.ToString());
                                 }
+                                else
+                                {
+                                    LexValue(value.ToString());   
+                                }
+
+                                parser.EndField();
+
+                                #if DEBUG
+                                Console.WriteLine("Data lexed successfully.");
+                                #endif
                             }
                         }
-
-                        parser.EndProperty();
                     }
-                }
 
-                parser.End();
+                    parser.EndProperty();
+                }
             }
+            parser.End();
         }
 
         private void LexKey(string key)

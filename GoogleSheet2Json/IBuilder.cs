@@ -9,7 +9,8 @@
     
     public interface IBuilder
     {
-        void StartBuild();
+        void StartBuildSingleObject();
+        void StartBuildArrayOfObjects();
         void SetRootName(string name);
         void StartProperty();
         void EndProperty();

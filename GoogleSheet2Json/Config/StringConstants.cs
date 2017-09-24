@@ -1,5 +1,9 @@
 ﻿namespace GoogleSheet2Json
 {
+    /// <summary>
+    /// Will hold all string constant of the application
+    /// </summary>
+    
     public class StringConstants
     {
         public const string WORD_PATTERN = @"(\w+\s*)*[^( \[* | \]* | \(* | \)* | \>* | \-* | \,* | *)]";
@@ -15,5 +19,15 @@
         public const string TRUE_CHAR = "TRUE";
         public const string FALSE_CHAR = "FALSE";
         public const string COMMENT_ANNOTATION = "#comment";
+        
+        // Command line commands
+        public const string CONFIG_FILE_PATH_COMMAND = "configPath";
+        public const string OVERRIDE_OUTPUT_DIR_COMMAND = "outputDir";
+        public const string OUTPUT_FILE_NAME_COMMAND = "outputFileName";
+        public const string IS_SINGLE_OBJECT_COMMAND = "isSingleObject";
+        public const string IS_LITERAL_KEY_COMMAND = "isLiteral";
+        public const string SHEET_TAB_COMMAND = "sheetTab";
+        public const string KEY_RANGE_COMMAND = "keyRange";
+        public const string VALUE_RANGE_COMMAND = "valueRange";
     }
 }

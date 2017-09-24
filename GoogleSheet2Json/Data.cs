@@ -11,17 +11,33 @@ namespace GoogleSheet2Json
 
     public class Data
     {
+        // properties for the single object export
+        public bool isSingleObject;
+        public List<FieldNode> fields = new List<FieldNode>();
+
+        // properties for exporting an array of objects
+        public bool isArrayOfObjects;
         public string root;
         public List<PropertyNode> properties = new List<PropertyNode>();
         
         public override string ToString()
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append($"[DATA] {root}");
             
-            foreach(var property in properties) 
-                stringBuilder.Append(property + "\n");
-
+            if (isSingleObject)
+            {
+                stringBuilder.Append($"[DATA] is single object ");
+                foreach(var field in fields) 
+                    stringBuilder.Append(field + "\n");
+            }
+            else if (isArrayOfObjects)
+            {
+               
+                stringBuilder.Append($"[DATA] {root}");
+                foreach(var property in properties) 
+                    stringBuilder.Append(property + "\n");
+            }
+            
             return stringBuilder.ToString();
         }
     }

@@ -60,7 +60,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArgumentReader.cs" />
     <Compile Include="Builder.cs" />
+    <Compile Include="Config\AppConfig.cs" />
+    <Compile Include="Config\StringConstants.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Generators\IGenerator.cs" />
     <Compile Include="Generators\JsonGenerator.cs" />
@@ -71,7 +74,6 @@
     <Compile Include="Lexer.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="IParser.cs" />
-    <Compile Include="StringConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
