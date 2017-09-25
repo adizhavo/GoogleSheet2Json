@@ -12,7 +12,7 @@ namespace GoogleSheet2JsonTest
         [SetUp]
         public void SetUp()
         {
-            argumenReader = new ArgumentReader();
+            argumenReader = new ArgumentReader(false);
         }
 
         [Test]

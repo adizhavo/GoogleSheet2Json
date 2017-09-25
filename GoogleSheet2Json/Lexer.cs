@@ -13,7 +13,7 @@ namespace GoogleSheet2Json
 
     public class Lexer
     {
-        private IParser parser;
+        private readonly IParser parser;
 
         private int positionInLine = 0;
 
@@ -61,9 +61,7 @@ namespace GoogleSheet2Json
 
                 if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
                 {
-                    #if DEBUG
-                    Console.WriteLine($"Lexing data with key: {key} and value: {value}");
-                    #endif
+                    Logger.DebugLogLine($"Lexing data with key: {key} and value: {value}");
                     
                     parser.StartField();
 
@@ -80,9 +78,7 @@ namespace GoogleSheet2Json
                     
                     parser.EndField();
                     
-                    #if DEBUG
-                    Console.WriteLine("Data lexed successfully.");
-                    #endif
+                    Logger.DebugLogLine("Data lexed successfully.");
                 }
             }
 
@@ -110,9 +106,7 @@ namespace GoogleSheet2Json
 
                             if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
                             {
-                                #if DEBUG
-                                Console.WriteLine($"Lexing data with key: {key} and value: {value}");
-                                #endif
+                                Logger.DebugLogLine($"Lexing data with key: {key} and value: {value}");
                                 
                                 parser.StartField();
 
@@ -129,9 +123,7 @@ namespace GoogleSheet2Json
 
                                 parser.EndField();
 
-                                #if DEBUG
-                                Console.WriteLine("Data lexed successfully.");
-                                #endif
+                                Logger.DebugLogLine("Data lexed successfully.");
                             }
                         }
                     }
@@ -161,7 +153,7 @@ namespace GoogleSheet2Json
         {
             if (!TokenFound(value))
             {
-                throw new ArgumentException($"[Lexer] value is not a valid token, character nr {positionInLine}, please read the documentation or tests for the supported charcters: {value}");
+                throw new ArgumentException($"[Lexer] value is not a valid token, character nr {positionInLine}, please read the documentation or tests for the supported characters: {value}");
             }
         }
 
