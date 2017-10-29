@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GoogleSheet2Json.Generators
 {
@@ -13,9 +14,12 @@ namespace GoogleSheet2Json.Generators
         public const string CLOSE_SQUARE_BRAC = "]";
         public const string OPEN_BRAC = "{";
         public const string CLOSE_BRAC = "}";
-       
+        private ExportConfig exportConfig;
+        
         public void Generate(Data buildData, ExportConfig exportConfig)
         {
+            this.exportConfig = exportConfig;
+            
             if (exportConfig.isArrayOfObjects)
             {
                 GenerateArrayOfObjects(buildData);                
@@ -78,7 +82,7 @@ namespace GoogleSheet2Json.Generators
                 }
                 else
                 {
-                    BuildField(property.fieldValue);
+                    BuildField(property.definition, property.fieldValue);
                 }
                 
                 if (i < fields.Count - 1)
@@ -88,15 +92,15 @@ namespace GoogleSheet2Json.Generators
             GeneratedContent += CLOSE_BRAC;
         }
 
-        private void BuildField(string element)
+        private void BuildField(string definition, string element)
         {
             var isString = IsStringValue(element);
-
-            if (isString) GeneratedContent += QUOTE;
+            
+            if (isString && !exportConfig.literalKeys.Contains(definition)) GeneratedContent += QUOTE;
 
             GeneratedContent += TryIfElementIsBoolean(element);
 
-            if (isString) GeneratedContent += QUOTE;
+            if (isString && !exportConfig.literalKeys.Contains(definition)) GeneratedContent += QUOTE;
         }
 
         private void BuildArrayOfMAps(List<string> keys, List<string> values)
