@@ -104,7 +104,7 @@ namespace GoogleSheet2Json
                             var key = keys[i].ToString().Trim();
                             var value = values[i];
 
-                            if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
+                            if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION) && !string.IsNullOrEmpty(value.ToString()))
                             {
                                 Logger.DebugLogLine($"Lexing data with key: {key} and value: {value}");
                                 

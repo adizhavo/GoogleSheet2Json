@@ -44,7 +44,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("");
             lexer.Lex(keys, values, mockExportConfig);
             
-            Assert.AreEqual("s n sp s_p n e_p ep e", mockParser.transition);
+            Assert.AreEqual("s n sp ep e", mockParser.transition);
         }
         
         [Test]
