@@ -6,7 +6,7 @@
     
     public class StringConstants
     {
-        public const string WORD_PATTERN = @"(\w+\s*)*[^( \[* | \]* | \(* | \)* | \>* | \-* | \,* | *)]";
+        public const string WORD_PATTERN = @"(\w+\s*)*[^( \[* | \]* | \(* | \)* | \>* | \,* | *)]";
         public const string EMPTY_SPACE_PATTERN = @"^\s";
         public const string COMMA = ",";
         public const string RANGE_CHAR = ">";
