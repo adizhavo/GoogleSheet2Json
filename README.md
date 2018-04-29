@@ -1,6 +1,6 @@
 # Google Sheets 2 JSON [![Build Status](https://travis-ci.org/adizhavo/GoogleSheet2Json.svg?branch=master)](https://travis-ci.org/adizhavo/GoogleSheet2Json)
 
-Advanced sheet 2 json exporter with a built-in parser with its own readable syntax for defining data types.
+Sheet to json exporter with a built-in parser with its own readable syntax for defining data types.
  
 ## SYNTAX
  
