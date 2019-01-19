@@ -69,10 +69,10 @@ namespace GoogleSheet2JsonTest
             parser.Name("field valie");
             parser.Comma();
             parser.Range();
-            parser.CloseBrace();
-            parser.OpenBrace();
-            parser.OpenSquareBrackets();
-            parser.CloseSquareBrackets();
+            parser.CloseBracket();
+            parser.OpenBracket();
+            parser.OpenSquareBracket();
+            parser.CloseSquareBracket();
             parser.EndField();
             parser.EndProperty();
             parser.End();
@@ -106,11 +106,11 @@ namespace GoogleSheet2JsonTest
             parser.StartProperty();
             parser.StartField();
             parser.Name("field definition");
-            parser.OpenSquareBrackets();
+            parser.OpenSquareBracket();
             parser.Name("1");
             parser.Comma();
             parser.Name("2");
-            parser.CloseSquareBrackets();
+            parser.CloseSquareBracket();
             parser.EndField();
             parser.EndProperty();
             parser.End();
@@ -126,11 +126,11 @@ namespace GoogleSheet2JsonTest
             parser.StartProperty();
             parser.StartField();
             parser.Name("field definition");
-            parser.OpenBrace();
+            parser.OpenBracket();
             parser.Name("key");
             parser.Comma();
             parser.Name("value");
-            parser.CloseBrace();
+            parser.CloseBracket();
             parser.EndField();
             parser.EndProperty();
             parser.End();
@@ -146,21 +146,21 @@ namespace GoogleSheet2JsonTest
             parser.StartProperty();
             parser.StartField();
             parser.Name("field definition");
-            parser.OpenBrace();
+            parser.OpenCurlyBracket();
             parser.Name("key");
             parser.Comma();
             parser.Name("value");
-            parser.CloseBrace();
-            parser.OpenBrace();
+            parser.CloseCurlyBracket();
+            parser.OpenCurlyBracket();
             parser.Name("key");
             parser.Comma();
             parser.Name("value");
-            parser.CloseBrace();
+            parser.CloseCurlyBracket();
             parser.EndField();
             parser.EndProperty();
             parser.End();
             
-            Assert.AreEqual("s rn s_p sp sm ak av sm ak av ep e_p eb", mockBuilder.buildPrint);
+            Assert.AreEqual("s rn s_p sp sm_a ak av sm_a ak av ep e_p eb", mockBuilder.buildPrint);
         }
 
         [Test]
@@ -265,6 +265,11 @@ namespace GoogleSheet2JsonTest
             public void StartMap()
             {
                 buildPrint += " sm";
+            }
+            
+            public void StartMapArray()
+            {
+                buildPrint += " sm_a";
             }
 
             public void AddKey(string key)

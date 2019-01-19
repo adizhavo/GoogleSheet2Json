@@ -194,10 +194,12 @@ namespace GoogleSheet2Json
                 {
                     case StringConstants.COMMA :                parser.Comma(); break;
                     case StringConstants.RANGE_CHAR :           parser.Range(); break;
-                    case StringConstants.OPEN_BRACKET :         parser.OpenBrace(); break;
-                    case StringConstants.CLOSE_BRACKET :        parser.CloseBrace(); break;
-                    case StringConstants.OPEN_SQUARE_BRACKET :  parser.OpenSquareBrackets(); break;
-                    case StringConstants.CLOSE_SQUARE_BRACKET : parser.CloseSquareBrackets(); break;
+                    case StringConstants.OPEN_BRACKET :         parser.OpenBracket(); break;
+                    case StringConstants.CLOSE_BRACKET :        parser.CloseBracket(); break;
+                    case StringConstants.OPEN_CURLY_BRACKET :         parser.OpenCurlyBracket(); break;
+                    case StringConstants.CLOSE_CURLY_BRACKET :        parser.CloseCurlyBracket(); break;
+                    case StringConstants.OPEN_SQUARE_BRACKET :  parser.OpenSquareBracket(); break;
+                    case StringConstants.CLOSE_SQUARE_BRACKET : parser.CloseSquareBracket(); break;
                     default  : found = false; break;
                 }
 

@@ -77,10 +77,10 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void LexSpecialCharactersAsSingleCharactersTest()
         {
-            values[0].Add("{ . + : ; ' ! ± @ # $ % ˆ ˜ ` ? - < … æ ‘ “ “ ≥ æ ≤ ¡ ™ £ ¢ ∞ § ¶ • ª º – ≠ œ ∑ ´ ® ¥ ¨ ˆ π ¬ ˚ ∆ ˙ © ƒ ∂ ß å Ω ç ≈ √ ˜ µ § }");
+            values[0].Add(". + : ; ' ! ± @ # $ % ˆ ˜ ` ? - < … æ ‘ “ “ ≥ æ ≤ ¡ ™ £ ¢ ∞ § ¶ • ª º – ≠ œ ∑ ´ ® ¥ ¨ ˆ π ¬ ˚ ∆ ˙ © ƒ ∂ ß å Ω ç ≈ √ ˜ µ §");
             lexer.Lex(keys, values, mockExportConfig);
             
-            Assert.AreEqual("s n sp s_p n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n e_p ep e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n e_p ep e", mockParser.transition);
         }
 
         [Test]
@@ -326,22 +326,32 @@ namespace GoogleSheet2JsonTest
             transition += " c";
         }
 
-        public void OpenBrace()
+        public void OpenBracket()
         {
             transition += " o_b";
         }
 
-        public void CloseBrace()
+        public void CloseBracket()
         {
             transition += " c_b";
         }
+        
+        public void OpenCurlyBracket()
+        {
+            transition += " o_cb";
+        }
 
-        public void OpenSquareBrackets()
+        public void CloseCurlyBracket()
+        {
+            transition += " c_cb";
+        }
+
+        public void OpenSquareBracket()
         {
             transition += " o_s_b";
         }
 
-        public void CloseSquareBrackets()
+        public void CloseSquareBracket()
         {
             transition += " c_s_b";
         }

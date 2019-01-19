@@ -49,11 +49,11 @@ namespace GoogleSheet2JsonTest
             builder.StartProperty();
             builder.StartField("property");
             
-            builder.StartMap();    
+            builder.StartMapArray();    
             builder.AddKey("key");
             builder.AddValue("value");
             
-            builder.StartMap();    
+            builder.StartMapArray();    
             builder.AddKey("key");
             builder.AddValue("value");
             

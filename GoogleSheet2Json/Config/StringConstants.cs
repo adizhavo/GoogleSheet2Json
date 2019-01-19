@@ -12,6 +12,8 @@
         public const string RANGE_CHAR = ">";
         public const string OPEN_BRACKET = "(";
         public const string CLOSE_BRACKET = ")";
+        public const string OPEN_CURLY_BRACKET = "{";
+        public const string CLOSE_CURLY_BRACKET = "}";
         public const string OPEN_SQUARE_BRACKET = "[";
         public const string CLOSE_SQUARE_BRACKET = "]";
         public const string COLON = ":";

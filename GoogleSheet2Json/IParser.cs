@@ -20,10 +20,12 @@ namespace GoogleSheet2Json
         void StartField();
         void EndField();
         void Comma();
-        void OpenBrace();
-        void CloseBrace();
-        void OpenSquareBrackets();
-        void CloseSquareBrackets();
+        void OpenBracket();
+        void CloseBracket();
+        void OpenCurlyBracket();
+        void CloseCurlyBracket();
+        void OpenSquareBracket();
+        void CloseSquareBracket();
         void Range();
         void WhiteSpace();
     }
@@ -40,10 +42,12 @@ namespace GoogleSheet2Json
         END_FIELD,
         SET_NAME,
         SET_COMMA,
-        OPEN_BRACE,
-        CLOSE_BRACE,
-        OPEN_SQUARE_BRACE,
-        CLOSE_SQUARE_BRACE,
+        OPEN_BRACKET,
+        CLOSE_BRACKET,
+        OPEN_CURLY_BRACKET,
+        CLOSE_CURLY_BRACKET,
+        OPEN_SQUARE_BRACKET,
+        CLOSE_SQUARE_BRACKET,
         SET_RANGE,
         WHITE_SPACE
     }

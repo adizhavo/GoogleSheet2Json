@@ -23,6 +23,7 @@
         void StartCollection();
         void AddFieldToCollection();
         void StartMap();
+        void StartMapArray();
         void AddKey(string key);
         void AddValue(string value);
         void AppendToKey(string key);

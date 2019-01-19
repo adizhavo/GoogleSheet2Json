@@ -132,22 +132,13 @@ namespace GoogleSheet2Json
         public void StartMap()
         {
             fieldNode.fieldValue = string.Empty;
-            
-            if (fieldNode.isMap)
-            {
-                fieldNode.isMap = false;
-                fieldNode.isArrayOfMaps = true;
-                
-                fieldNode.keys.Add(fieldNode.key);
-                fieldNode.key = string.Empty;
-                
-                fieldNode.values.Add(fieldNode.value);
-                fieldNode.value = string.Empty;
-            }
-            else
-            {
-                fieldNode.isMap = true;
-            }
+            fieldNode.isMap = true;
+        }
+
+        public void StartMapArray()
+        {
+            fieldNode.fieldValue = string.Empty;
+            fieldNode.isArrayOfMaps = true;
         }
 
         public void AddKey(string key)

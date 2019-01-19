@@ -9,6 +9,7 @@ namespace GoogleSheet2Json
 
     public class Parser : IParser
     {
+        public char[] trimChars = { ' ' };
         public ParserState currentState { get; private set; }
 
         private string setName;
@@ -41,7 +42,7 @@ namespace GoogleSheet2Json
 
         public void Name(string name)
         {
-            setName = name.Trim();
+            setName = name.Trim(trimChars);
             HandleEvent(ParserEvent.SET_NAME);
         }
 
@@ -70,24 +71,34 @@ namespace GoogleSheet2Json
             HandleEvent(ParserEvent.SET_COMMA);
         }
 
-        public void OpenBrace()
+        public void OpenBracket()
         {
-            HandleEvent(ParserEvent.OPEN_BRACE);
+            HandleEvent(ParserEvent.OPEN_BRACKET);
         }
 
-        public void CloseBrace()
+        public void CloseBracket()
         {
-            HandleEvent(ParserEvent.CLOSE_BRACE);
+            HandleEvent(ParserEvent.CLOSE_BRACKET);
+        }
+        
+        public void OpenCurlyBracket()
+        {
+            HandleEvent(ParserEvent.OPEN_CURLY_BRACKET);
         }
 
-        public void OpenSquareBrackets()
+        public void CloseCurlyBracket()
         {
-            HandleEvent(ParserEvent.OPEN_SQUARE_BRACE);
+            HandleEvent(ParserEvent.CLOSE_CURLY_BRACKET);
         }
 
-        public void CloseSquareBrackets()
+        public void OpenSquareBracket()
         {
-            HandleEvent(ParserEvent.CLOSE_SQUARE_BRACE);
+            HandleEvent(ParserEvent.OPEN_SQUARE_BRACKET);
+        }
+
+        public void CloseSquareBracket()
+        {
+            HandleEvent(ParserEvent.CLOSE_SQUARE_BRACKET);
         }
 
         public void Range()
@@ -129,53 +140,72 @@ namespace GoogleSheet2Json
                 new Transition(ParserState.FIELD,            ParserEvent.SET_NAME,           ParserState.FIELD_VALUE,          () => builder.SetField(setName)),
                 new Transition(ParserState.FIELD_VALUE,      ParserEvent.SET_NAME,           ParserState.FIELD_VALUE,          () => builder.SetField(setName)),
                 new Transition(ParserState.FIELD_VALUE,      ParserEvent.WHITE_SPACE,        ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.EMPTY_SPACE)),
-                new Transition(ParserState.FIELD_VALUE,      ParserEvent.OPEN_BRACE,         ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.OPEN_BRACKET)),
-                new Transition(ParserState.FIELD_VALUE,      ParserEvent.CLOSE_BRACE,        ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.CLOSE_BRACKET)),
-                new Transition(ParserState.FIELD_VALUE,      ParserEvent.OPEN_SQUARE_BRACE,  ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.OPEN_SQUARE_BRACKET)),
-                new Transition(ParserState.FIELD_VALUE,      ParserEvent.CLOSE_SQUARE_BRACE, ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.CLOSE_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_VALUE,      ParserEvent.OPEN_BRACKET,         ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.OPEN_BRACKET)),
+                new Transition(ParserState.FIELD_VALUE,      ParserEvent.CLOSE_BRACKET,        ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.CLOSE_BRACKET)),
+                new Transition(ParserState.FIELD_VALUE,      ParserEvent.OPEN_SQUARE_BRACKET,  ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.OPEN_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_VALUE,      ParserEvent.CLOSE_SQUARE_BRACKET, ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.CLOSE_SQUARE_BRACKET)),
                 new Transition(ParserState.FIELD_VALUE,      ParserEvent.SET_COMMA,          ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.COMMA)),
                 new Transition(ParserState.FIELD_VALUE,      ParserEvent.SET_RANGE,          ParserState.FIELD_RANGE,          () => builder.TryAddMinRange(StringConstants.RANGE_CHAR)),
                 new Transition(ParserState.FIELD_RANGE,      ParserEvent.SET_NAME,           ParserState.FIELD_VALUE,          () => builder.TryAddMaxRange(setName)),
                 new Transition(ParserState.FIELD_RANGE,      ParserEvent.WHITE_SPACE,        ParserState.FIELD_RANGE,          null),
-                new Transition(ParserState.FIELD_RANGE,      ParserEvent.OPEN_BRACE,         ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.OPEN_BRACKET)),
-                new Transition(ParserState.FIELD_RANGE,      ParserEvent.CLOSE_BRACE,        ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.CLOSE_BRACKET)),
-                new Transition(ParserState.FIELD_RANGE,      ParserEvent.OPEN_SQUARE_BRACE,  ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.OPEN_SQUARE_BRACKET)),
-                new Transition(ParserState.FIELD_RANGE,      ParserEvent.CLOSE_SQUARE_BRACE, ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.CLOSE_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_RANGE,      ParserEvent.OPEN_BRACKET,         ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.OPEN_BRACKET)),
+                new Transition(ParserState.FIELD_RANGE,      ParserEvent.CLOSE_BRACKET,        ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.CLOSE_BRACKET)),
+                new Transition(ParserState.FIELD_RANGE,      ParserEvent.OPEN_SQUARE_BRACKET,  ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.OPEN_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_RANGE,      ParserEvent.CLOSE_SQUARE_BRACKET, ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.CLOSE_SQUARE_BRACKET)),
                 new Transition(ParserState.FIELD_RANGE,      ParserEvent.SET_COMMA,          ParserState.FIELD_VALUE,          () => builder.SetField(StringConstants.COMMA)),
                 new Transition(ParserState.FIELD_VALUE,      ParserEvent.END_FIELD,          ParserState.FIELD_DEF,            builder.EndField),
                 new Transition(ParserState.FIELD_VALUE,      ParserEvent.START_FIELD,        ParserState.FIELD_DEF,            builder.EndField),
                 
-                new Transition(ParserState.FIELD,            ParserEvent.OPEN_SQUARE_BRACE,  ParserState.FIELD_COLL_VALUE,     builder.StartCollection),
+                new Transition(ParserState.FIELD,            ParserEvent.OPEN_SQUARE_BRACKET,  ParserState.FIELD_COLL_VALUE,     builder.StartCollection),
                 new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.SET_NAME,           ParserState.FIELD_COLL_VALUE,     () => builder.SetField(setName)),
                 new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.SET_RANGE,          ParserState.FIELD_COLL_VALUE,     () => builder.SetField(StringConstants.RANGE_CHAR)),
                 new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.WHITE_SPACE,        ParserState.FIELD_COLL_VALUE,     () => builder.SetField(StringConstants.EMPTY_SPACE)),
-                new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.OPEN_BRACE,         ParserState.FIELD_COLL_VALUE,     () => builder.SetField(StringConstants.OPEN_BRACKET)),
-                new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.CLOSE_BRACE,        ParserState.FIELD_COLL_VALUE,     () => builder.SetField(StringConstants.CLOSE_BRACKET)),
+                new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.OPEN_BRACKET,         ParserState.FIELD_COLL_VALUE,     () => builder.SetField(StringConstants.OPEN_BRACKET)),
+                new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.CLOSE_BRACKET,        ParserState.FIELD_COLL_VALUE,     () => builder.SetField(StringConstants.CLOSE_BRACKET)),
                 new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.SET_COMMA,          ParserState.FIELD_COLL_COMMA,     builder.AddFieldToCollection),
                 new Transition(ParserState.FIELD_COLL_COMMA, ParserEvent.SET_NAME,           ParserState.FIELD_COLL_VALUE,     () => builder.SetField(setName)),
                 new Transition(ParserState.FIELD_COLL_COMMA, ParserEvent.SET_RANGE,          ParserState.FIELD_COLL_VALUE,     null),
                 new Transition(ParserState.FIELD_COLL_COMMA, ParserEvent.WHITE_SPACE,        ParserState.FIELD_COLL_COMMA,     null),
-                new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.CLOSE_SQUARE_BRACE, ParserState.FIELD_COLL,           builder.AddFieldToCollection),
+                new Transition(ParserState.FIELD_COLL_VALUE, ParserEvent.CLOSE_SQUARE_BRACKET, ParserState.FIELD_COLL,           builder.AddFieldToCollection),
                 new Transition(ParserState.FIELD_COLL,       ParserEvent.END_FIELD,          ParserState.FIELD_DEF,            builder.EndField),
                 
-                new Transition(ParserState.FIELD,            ParserEvent.OPEN_BRACE,         ParserState.FIELD_MAP_KEY,        builder.StartMap),
-                new Transition(ParserState.FIELD_MAP_KEY,    ParserEvent.SET_NAME,           ParserState.FIELD_MAP_KEY,        () => builder.AddKey(setName)),
-                new Transition(ParserState.FIELD_MAP_KEY,    ParserEvent.SET_RANGE,          ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.RANGE_CHAR)),
-                new Transition(ParserState.FIELD_MAP_KEY,    ParserEvent.WHITE_SPACE,        ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.EMPTY_SPACE)),
-                new Transition(ParserState.FIELD_MAP_KEY,    ParserEvent.OPEN_SQUARE_BRACE,  ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.OPEN_SQUARE_BRACKET)),
-                new Transition(ParserState.FIELD_MAP_KEY,    ParserEvent.CLOSE_SQUARE_BRACE, ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.CLOSE_SQUARE_BRACKET)),
-                new Transition(ParserState.FIELD_MAP_KEY,    ParserEvent.SET_COMMA,          ParserState.FIELD_MAP_COMMA,      null),
-                new Transition(ParserState.FIELD_MAP_COMMA,  ParserEvent.WHITE_SPACE,        ParserState.FIELD_MAP_COMMA,      null),
-                new Transition(ParserState.FIELD_MAP_COMMA,  ParserEvent.SET_NAME,           ParserState.FIELD_MAP_VALUE,      () => builder.AddValue(setName)),
-                new Transition(ParserState.FIELD_MAP_COMMA,  ParserEvent.SET_RANGE,          ParserState.FIELD_MAP_VALUE,      null),
-                new Transition(ParserState.FIELD_MAP_VALUE,  ParserEvent.CLOSE_BRACE,        ParserState.FIELD_MAP,            null),
-                new Transition(ParserState.FIELD_MAP_VALUE,  ParserEvent.SET_RANGE,          ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.RANGE_CHAR)),
-                new Transition(ParserState.FIELD_MAP_VALUE,  ParserEvent.WHITE_SPACE,        ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.EMPTY_SPACE)),
-                new Transition(ParserState.FIELD_MAP_VALUE,  ParserEvent.OPEN_SQUARE_BRACE,  ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.OPEN_SQUARE_BRACKET)),
-                new Transition(ParserState.FIELD_MAP_VALUE,  ParserEvent.CLOSE_SQUARE_BRACE, ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.CLOSE_SQUARE_BRACKET)),
-                new Transition(ParserState.FIELD_MAP_VALUE,  ParserEvent.SET_NAME,           ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(setName)),
-                new Transition(ParserState.FIELD_MAP,        ParserEvent.END_FIELD,          ParserState.FIELD_DEF,            builder.EndField),
-                new Transition(ParserState.FIELD_MAP,        ParserEvent.OPEN_BRACE,         ParserState.FIELD_MAP_KEY,        builder.StartMap)
+                new Transition(ParserState.FIELD,                             ParserEvent.OPEN_BRACKET,              ParserState.FIELD_MAP_KEY,        builder.StartMap),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.SET_NAME,                       ParserState.FIELD_MAP_KEY,        () => builder.AddKey(setName)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.SET_RANGE,                      ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.RANGE_CHAR)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.WHITE_SPACE,                        ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.EMPTY_SPACE)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.OPEN_SQUARE_BRACKET,      ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.OPEN_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.CLOSE_SQUARE_BRACKET,     ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.CLOSE_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.SET_COMMA,                              ParserState.FIELD_MAP_COMMA,      null),
+                new Transition(ParserState.FIELD_MAP_COMMA,     ParserEvent.WHITE_SPACE,                            ParserState.FIELD_MAP_COMMA,      null),
+                new Transition(ParserState.FIELD_MAP_COMMA,     ParserEvent.SET_NAME,                                   ParserState.FIELD_MAP_VALUE,      () => builder.AddValue(setName)),
+                new Transition(ParserState.FIELD_MAP_COMMA,     ParserEvent.SET_RANGE,                              ParserState.FIELD_MAP_VALUE,      null),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.CLOSE_BRACKET,                        ParserState.FIELD_MAP,            null),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.SET_RANGE,                                      ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.RANGE_CHAR)),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.WHITE_SPACE,                            ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.EMPTY_SPACE)),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.OPEN_SQUARE_BRACKET,          ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.OPEN_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.CLOSE_SQUARE_BRACKET,             ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.CLOSE_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.SET_NAME,                                       ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(setName)),
+                new Transition(ParserState.FIELD_MAP,                     ParserEvent.END_FIELD,                                      ParserState.FIELD_DEF,            builder.EndField),
+                new Transition(ParserState.FIELD_MAP,                     ParserEvent.OPEN_BRACKET,                             ParserState.FIELD_MAP_KEY,        builder.StartMap),
+            
+                new Transition(ParserState.FIELD,                             ParserEvent.OPEN_CURLY_BRACKET,              ParserState.FIELD_MAP_KEY,        builder.StartMapArray),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.SET_NAME,                       ParserState.FIELD_MAP_KEY,        () => builder.AddKey(setName)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.SET_RANGE,                      ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.RANGE_CHAR)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.WHITE_SPACE,                        ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.EMPTY_SPACE)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.OPEN_SQUARE_BRACKET,      ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.OPEN_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.CLOSE_SQUARE_BRACKET,     ParserState.FIELD_MAP_KEY,        () => builder.AppendToKey(StringConstants.CLOSE_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_MAP_KEY,            ParserEvent.SET_COMMA,                              ParserState.FIELD_MAP_COMMA,      null),
+                new Transition(ParserState.FIELD_MAP_COMMA,     ParserEvent.WHITE_SPACE,                            ParserState.FIELD_MAP_COMMA,      null),
+                new Transition(ParserState.FIELD_MAP_COMMA,     ParserEvent.SET_NAME,                                   ParserState.FIELD_MAP_VALUE,      () => builder.AddValue(setName)),
+                new Transition(ParserState.FIELD_MAP_COMMA,     ParserEvent.SET_RANGE,                              ParserState.FIELD_MAP_VALUE,      null),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.CLOSE_CURLY_BRACKET,                        ParserState.FIELD_MAP,            null),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.SET_RANGE,                                      ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.RANGE_CHAR)),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.WHITE_SPACE,                            ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.EMPTY_SPACE)),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.OPEN_SQUARE_BRACKET,          ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.OPEN_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.CLOSE_SQUARE_BRACKET,             ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(StringConstants.CLOSE_SQUARE_BRACKET)),
+                new Transition(ParserState.FIELD_MAP_VALUE,        ParserEvent.SET_NAME,                                       ParserState.FIELD_MAP_VALUE,      () => builder.AppendToValue(setName)),
+                new Transition(ParserState.FIELD_MAP,                     ParserEvent.END_FIELD,                                      ParserState.FIELD_DEF,            builder.EndField),
+                new Transition(ParserState.FIELD_MAP,                     ParserEvent.OPEN_CURLY_BRACKET,                             ParserState.FIELD_MAP_KEY,        builder.StartMapArray)
             };
         }
         
