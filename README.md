@@ -14,9 +14,8 @@ Sheet to json exporter with a built-in parser with its own readable syntax for d
 * ```(``` and ```)``` are used to define a key value pair of any type
 >```(1, 2)``` will translate to ```{ "key" : 1, "value" : 2 }``` in json <br>
 >```(1, one)``` will translate to ```{ "key": 1, "value": "one" }``` in json
- 
-* the system can parse an array of maps
->```(one, 1) (two, 2)``` will translate to ```[ {"key": "one", "value": 1} , {"key": "two", "value": 2} ]```
+>```{1, one}``` will translate to ```[{ "key": 1, "value": "one" }]``` in json
+>```{1, one} {2, two}``` will translate to ```[{ "key": 1, "value": "one" }, { "key": 2, "value": "two" }]``` in json
  
 * ```#comment``` columns will be ignored by the parser
  
