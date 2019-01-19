@@ -4,9 +4,8 @@
     /// Will build the data structure for the parsed data by receiving commands
     /// from the parser
     /// </summary>
-    
+
     // This interface is required to create mocks for tests
-    
     public interface IBuilder
     {
         void StartBuildSingleObject();

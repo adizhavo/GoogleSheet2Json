@@ -8,7 +8,7 @@ namespace GoogleSheet2Json
         /// Will build the data structure for the parsed data by receiving commands
         /// from the parser
         /// </summary>
-        
+
         public Data BuildData { get; private set; }
 
         private PropertyNode propertyNode;
@@ -23,7 +23,7 @@ namespace GoogleSheet2Json
         {
             BuildData.isSingleObject = true;
         }
-        
+
         public void StartBuildArrayOfObjects()
         {
             BuildData.isArrayOfObjects = true;
@@ -48,7 +48,7 @@ namespace GoogleSheet2Json
                 BuildData.properties.Add(propertyNode);
             }
 
-            Logger.DebugLogLine($"End property with fields: {propertyNode}");            
+            Logger.DebugLogLine($"End property with fields: {propertyNode}");
         }
 
         public void StartField(string fieldDefintion)
@@ -60,13 +60,13 @@ namespace GoogleSheet2Json
         {
             if (BuildData.isArrayOfObjects)
             {
-                propertyNode.fields.Add(fieldNode);    
+                propertyNode.fields.Add(fieldNode);
             }
             else if (BuildData.isSingleObject)
             {
                 BuildData.fields.Add(fieldNode);
             }
-           
+
             Logger.DebugLogLine($"End field with data: {fieldNode}");
         }
 
@@ -88,7 +88,7 @@ namespace GoogleSheet2Json
             int outInt = -1;
             long outLong = -1;
             float outFloat = -1f;
-            
+
             var isInt = short.TryParse(fValue, out outShort) || int.TryParse(fValue, out outInt) || long.TryParse(fValue, out outLong);
             var isFloat = float.TryParse(fValue, out outFloat);
 
@@ -144,7 +144,7 @@ namespace GoogleSheet2Json
         public void AddKey(string key)
         {
             fieldNode.fieldValue = string.Empty;
-            
+
             if (fieldNode.isMap)
             {
                 fieldNode.key = key;
@@ -158,7 +158,7 @@ namespace GoogleSheet2Json
         public void AddValue(string value)
         {
             fieldNode.fieldValue = string.Empty;
-            
+
             if (fieldNode.isMap)
             {
                 fieldNode.value = value;
@@ -180,7 +180,7 @@ namespace GoogleSheet2Json
                 fieldNode.keys[fieldNode.keys.Count - 1] += key;
             }
         }
-        
+
         public void AppendToValue(string value)
         {
             if (fieldNode.isMap)

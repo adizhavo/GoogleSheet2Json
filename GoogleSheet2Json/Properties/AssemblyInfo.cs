@@ -13,4 +13,3 @@ using System.Runtime.CompilerServices;
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
 [assembly: AssemblyVersion("1.0.0")]
-

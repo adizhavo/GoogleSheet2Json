@@ -8,7 +8,6 @@ namespace GoogleSheet2Json
     /// </summary>
 
     // This interface is required to create mocks for tests
-
     public interface IParser
     {
         void StartSingleObject();

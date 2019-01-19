@@ -3,7 +3,7 @@ using System.IO;
 using Newtonsoft.Json;
 
 namespace GoogleSheet2Json
-{   
+{
     public class AppConfig
     {
         public string applicationName;
@@ -21,15 +21,15 @@ namespace GoogleSheet2Json
     public class ConfigReader
     {
         public AppConfig appConfig { private set; get; }
-        
+
         public void Initialise(ExportConfig exportConfig)
         {
             if (string.IsNullOrEmpty(exportConfig.configPath))
             {
                 throw new ArgumentNullException("[ConfigReader] config path is empty");
             }
-            
-            StreamReader file =  new StreamReader(exportConfig.configPath);
+
+            StreamReader file = new StreamReader(exportConfig.configPath);
             using (file)
             {
                 appConfig = JsonConvert.DeserializeObject<AppConfig>(file.ReadToEnd());

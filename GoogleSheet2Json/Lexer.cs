@@ -10,7 +10,6 @@ namespace GoogleSheet2Json
     /// <summary>
     /// Will lex the stream of data and deliver commands to the parser
     /// </summary>
-
     public class Lexer
     {
         private readonly IParser parser;
@@ -28,7 +27,7 @@ namespace GoogleSheet2Json
             {
                 if (exportConfig.isArrayOfObjects)
                 {
-                    LexArrayOfValues(keys, dataValues, exportConfig);     
+                    LexArrayOfValues(keys, dataValues, exportConfig);
                 }
                 else if (exportConfig.isSingleObject)
                 {
@@ -62,7 +61,7 @@ namespace GoogleSheet2Json
                 if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION))
                 {
                     Logger.DebugLogLine($"Lexing data with key: {key} and value: {value}");
-                    
+
                     parser.StartField();
 
                     LexKey(key);
@@ -75,16 +74,16 @@ namespace GoogleSheet2Json
                     {
                         LexValue(value.ToString());
                     }
-                    
+
                     parser.EndField();
-                    
+
                     Logger.DebugLogLine("Data lexed successfully.");
                 }
             }
 
             parser.End();
         }
-        
+
         private void LexArrayOfValues(IList<object> keys, IList<IList<object>> dataValues, ExportConfig exportConfig)
         {
             parser.StartArrayOfObjects();
@@ -107,7 +106,7 @@ namespace GoogleSheet2Json
                             if (!string.Equals(key, StringConstants.COMMENT_ANNOTATION) && !string.IsNullOrEmpty(value.ToString()))
                             {
                                 Logger.DebugLogLine($"Lexing data with key: {key} and value: {value}");
-                                
+
                                 parser.StartField();
 
                                 LexKey(key);
@@ -118,7 +117,7 @@ namespace GoogleSheet2Json
                                 }
                                 else
                                 {
-                                    LexValue(value.ToString());   
+                                    LexValue(value.ToString());
                                 }
 
                                 parser.EndField();
@@ -131,6 +130,7 @@ namespace GoogleSheet2Json
                     parser.EndProperty();
                 }
             }
+
             parser.End();
         }
 
@@ -143,7 +143,7 @@ namespace GoogleSheet2Json
         {
             positionInLine = 0;
 
-            while(positionInLine < value.Length)
+            while (positionInLine < value.Length)
             {
                 LexToken(value);
             }
@@ -180,7 +180,7 @@ namespace GoogleSheet2Json
 
                 return regex.Success;
             }
-            
+
             return false;
         }
 
@@ -192,25 +192,43 @@ namespace GoogleSheet2Json
                 var character = value.Substring(positionInLine, 1);
                 switch (character)
                 {
-                    case StringConstants.COMMA :                parser.Comma(); break;
-                    case StringConstants.RANGE_CHAR :           parser.Range(); break;
-                    case StringConstants.OPEN_BRACKET :         parser.OpenBracket(); break;
-                    case StringConstants.CLOSE_BRACKET :        parser.CloseBracket(); break;
-                    case StringConstants.OPEN_CURLY_BRACKET :         parser.OpenCurlyBracket(); break;
-                    case StringConstants.CLOSE_CURLY_BRACKET :        parser.CloseCurlyBracket(); break;
-                    case StringConstants.OPEN_SQUARE_BRACKET :  parser.OpenSquareBracket(); break;
-                    case StringConstants.CLOSE_SQUARE_BRACKET : parser.CloseSquareBracket(); break;
-                    default  : found = false; break;
+                    case StringConstants.COMMA:
+                        parser.Comma();
+                        break;
+                    case StringConstants.RANGE_CHAR:
+                        parser.Range();
+                        break;
+                    case StringConstants.OPEN_BRACKET:
+                        parser.OpenBracket();
+                        break;
+                    case StringConstants.CLOSE_BRACKET:
+                        parser.CloseBracket();
+                        break;
+                    case StringConstants.OPEN_CURLY_BRACKET:
+                        parser.OpenCurlyBracket();
+                        break;
+                    case StringConstants.CLOSE_CURLY_BRACKET:
+                        parser.CloseCurlyBracket();
+                        break;
+                    case StringConstants.OPEN_SQUARE_BRACKET:
+                        parser.OpenSquareBracket();
+                        break;
+                    case StringConstants.CLOSE_SQUARE_BRACKET:
+                        parser.CloseSquareBracket();
+                        break;
+                    default:
+                        found = false;
+                        break;
                 }
 
                 if (found)
                 {
-                    positionInLine ++;
+                    positionInLine++;
                 }
 
                 return found;
             }
-            
+
             return false;
         }
 
@@ -232,4 +250,3 @@ namespace GoogleSheet2Json
         }
     }
 }
-

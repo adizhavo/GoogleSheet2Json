@@ -23,7 +23,7 @@ namespace GoogleSheet2JsonTest
             parser.StartProperty();
             parser.EndProperty();
             parser.End();
-            
+
             Assert.AreEqual("s rn s_p e_p eb", mockBuilder.buildPrint);
         }
 
@@ -38,10 +38,10 @@ namespace GoogleSheet2JsonTest
             parser.EndField();
             parser.EndProperty();
             parser.End();
-            
+
             Assert.AreEqual("s rn s_p sp ep e_p eb", mockBuilder.buildPrint);
         }
-        
+
         [Test]
         public void ParsePropertyValueTest()
         {
@@ -54,10 +54,10 @@ namespace GoogleSheet2JsonTest
             parser.EndField();
             parser.EndProperty();
             parser.End();
-            
+
             Assert.AreEqual("s rn s_p sp f ep e_p eb", mockBuilder.buildPrint);
         }
-        
+
         [Test]
         public void ParsePropertyValueWithSymbolsTest()
         {
@@ -76,7 +76,7 @@ namespace GoogleSheet2JsonTest
             parser.EndField();
             parser.EndProperty();
             parser.End();
-            
+
             Assert.AreEqual("s rn s_p sp f f min f f f f ep e_p eb", mockBuilder.buildPrint);
         }
 
@@ -94,7 +94,7 @@ namespace GoogleSheet2JsonTest
             parser.EndField();
             parser.EndProperty();
             parser.End();
-            
+
             Assert.AreEqual("s rn s_p sp f min max ep e_p eb", mockBuilder.buildPrint);
         }
 
@@ -114,7 +114,7 @@ namespace GoogleSheet2JsonTest
             parser.EndField();
             parser.EndProperty();
             parser.End();
-            
+
             Assert.AreEqual("s rn s_p sp sc f ac f ac ep e_p eb", mockBuilder.buildPrint);
         }
 
@@ -134,10 +134,10 @@ namespace GoogleSheet2JsonTest
             parser.EndField();
             parser.EndProperty();
             parser.End();
-            
+
             Assert.AreEqual("s rn s_p sp sm ak av ep e_p eb", mockBuilder.buildPrint);
         }
-        
+
         [Test]
         public void ParsePropertyArrayOfMapTest()
         {
@@ -159,7 +159,7 @@ namespace GoogleSheet2JsonTest
             parser.EndField();
             parser.EndProperty();
             parser.End();
-            
+
             Assert.AreEqual("s rn s_p sp sm_a ak av sm_a ak av ep e_p eb", mockBuilder.buildPrint);
         }
 
@@ -172,10 +172,10 @@ namespace GoogleSheet2JsonTest
             parser.Name("field value");
             parser.EndField();
             parser.End();
-            
+
             Assert.AreEqual("s_o sp f ep eb", mockBuilder.buildPrint);
         }
-        
+
         [Test]
         public void ParseSingleObjectWithMultipleFieldsTest()
         {
@@ -189,7 +189,7 @@ namespace GoogleSheet2JsonTest
             parser.Name("field value 2");
             parser.EndField();
             parser.End();
-            
+
             Assert.AreEqual("s_o sp f ep sp f ep eb", mockBuilder.buildPrint);
         }
 
@@ -201,7 +201,7 @@ namespace GoogleSheet2JsonTest
             {
                 buildPrint += "s_o";
             }
-            
+
             public void StartBuildArrayOfObjects()
             {
                 buildPrint += "s";
@@ -221,7 +221,7 @@ namespace GoogleSheet2JsonTest
             {
                 buildPrint += " e_p";
             }
-            
+
             public void StartField(string fieldDefintion)
             {
                 buildPrint += " sp";
@@ -266,7 +266,7 @@ namespace GoogleSheet2JsonTest
             {
                 buildPrint += " sm";
             }
-            
+
             public void StartMapArray()
             {
                 buildPrint += " sm_a";
