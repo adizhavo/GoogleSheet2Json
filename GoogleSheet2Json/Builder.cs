@@ -183,7 +183,7 @@ namespace GoogleSheet2Json
 
         public void AppendToValue(string value)
         {
-            if (fieldNode.isMap)
+            if (fieldNode.isMap && !fieldNode.isArrayOfMaps)
             {
                 fieldNode.value += value;
             }

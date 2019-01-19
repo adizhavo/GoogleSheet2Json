@@ -176,10 +176,19 @@ namespace GoogleSheet2JsonTest
         [Test]
         public void LexArrayMapOfWordsAndNumberTest()
         {
-            values[0].Add("(one, 1) (two, 2) (three, 3)");
+            values[0].Add("{one, 1} {two, 2}");
             lexer.Lex(keys, values, mockExportConfig);
 
-            Assert.AreEqual("s n sp s_p n o_b n c n c_b o_b n c n c_b o_b n c n c_b e_p ep e", mockParser.transition);
+            Assert.AreEqual("s n sp s_p n o_cb n c n c_cb o_cb n c n c_cb e_p ep e", mockParser.transition);
+        }
+
+        [Test]
+        public void LexArrayMapTest()
+        {
+            values[0].Add("{one, 1}");
+            lexer.Lex(keys, values, mockExportConfig);
+
+            Assert.AreEqual("s n sp s_p n o_cb n c n c_cb e_p ep e", mockParser.transition);
         }
 
         [Test]
