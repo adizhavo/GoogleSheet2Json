@@ -6,19 +6,18 @@ namespace GoogleSheet2Json
     /// <summary>
     /// Will read/parse the Comamnd Line Arguments and setup export variables
     /// </summary>
-    
     public class ArgumentReader
     {
         public ExportConfig exportConfig { get; }
 
         private bool checkErrors;
-        
+
         public ArgumentReader(bool checkErrors = true)
         {
             this.checkErrors = checkErrors;
             exportConfig = new ExportConfig();
         }
-        
+
         public void Parse(string[] arguments)
         {
             foreach (var argument in arguments)
@@ -29,8 +28,8 @@ namespace GoogleSheet2Json
                     var split = trimmedArgument.Split('=');
                     var command = split.Length > 0 ? split[0] : trimmedArgument;
                     var variables = split.Length > 1 ? split[1] : string.Empty;
-                
-                    CheckForArrayOrSingleObject(command);   
+
+                    CheckForArrayOrSingleObject(command);
                     AddLiteratKeys(command, variables);
                     SetSheetTab(command, variables);
                     SetKeyValueRange(command, variables);
@@ -39,7 +38,7 @@ namespace GoogleSheet2Json
                     SetOutputFileName(command, variables);
                 }
             }
-            
+
             Logger.DebugLogLine($"[ArgumentReader] arguments setup: {exportConfig}");
             if (checkErrors && CheckForErrors())
             {
@@ -51,7 +50,7 @@ namespace GoogleSheet2Json
         {
             if (string.Equals(StringConstants.IS_SINGLE_OBJECT_COMMAND, command))
             {
-                exportConfig.isSingleObject = true; 
+                exportConfig.isSingleObject = true;
                 exportConfig.isArrayOfObjects = false;
             }
         }
@@ -103,7 +102,7 @@ namespace GoogleSheet2Json
                 exportConfig.outputDir = varible;
             }
         }
-        
+
         private void SetOutputFileName(string command, string varible)
         {
             if (string.Equals(StringConstants.OUTPUT_FILE_NAME_COMMAND, command))
@@ -119,7 +118,7 @@ namespace GoogleSheet2Json
                 Logger.LogLine($"App config path is empty, please use -{StringConstants.CONFIG_FILE_PATH_COMMAND} command", Logger.LogType.Error);
                 return true;
             }
-            
+
             if (string.IsNullOrEmpty(exportConfig.sheetTab))
             {
                 Logger.LogLine($"Sheet tab is empty, please use -{StringConstants.SHEET_TAB_COMMAND} command", Logger.LogType.Error);
@@ -131,13 +130,13 @@ namespace GoogleSheet2Json
                 Logger.LogLine($"Key range is empty, please use -{StringConstants.KEY_RANGE_COMMAND} command", Logger.LogType.Error);
                 return true;
             }
-            
+
             if (string.IsNullOrEmpty(exportConfig.valueRange))
             {
                 Logger.LogLine($"Value range is empty, please use -{StringConstants.VALUE_RANGE_COMMAND} command", Logger.LogType.Error);
                 return true;
             }
-            
+
             if (string.Equals(exportConfig.outputFileName, "FILE_NAME_NOT_SET"))
             {
                 Logger.LogLine($"File name not set, please use -{StringConstants.OUTPUT_FILE_NAME_COMMAND} command, will set to FILE_NAME_NOT_SET as default", Logger.LogType.Warning);
@@ -158,7 +157,7 @@ namespace GoogleSheet2Json
         public string configPath;
         public string outputDir;
         public string outputFileName;
-        
+
         public ExportConfig()
         {
             literalKeys = new List<string>();

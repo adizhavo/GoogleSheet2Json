@@ -14,7 +14,7 @@ namespace GoogleSheet2JsonTest
         private IList<IList<object>> values;
 
         private ExportConfig mockExportConfig;
-        
+
         [SetUp]
         public void Init()
         {
@@ -22,7 +22,7 @@ namespace GoogleSheet2JsonTest
             mockParser = new MockParser();
             lexer = new Lexer(mockParser);
             mockExportConfig = new ExportConfig();
-            
+
             // Init mock data 
             keys = new List<object> {"sampleKey"};
             // ugly annotation imposed by the Google API
@@ -34,34 +34,34 @@ namespace GoogleSheet2JsonTest
         {
             keys.Clear();
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexEmptyValueDataTest()
         {
             values[0].Add("");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexSingleWordTest()
         {
             values[0].Add("single_word");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexMultipleWordTest()
         {
             values[0].Add("multplie words with numbers 1 2 3");
             lexer.Lex(keys, values, mockExportConfig);
-             
+
             Assert.AreEqual("s n sp s_p n n e_p ep e", mockParser.transition);
         }
 
@@ -70,17 +70,17 @@ namespace GoogleSheet2JsonTest
         {
             values[0].Add("word with special . dot");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n n e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexSpecialCharactersAsSingleCharactersTest()
         {
-            values[0].Add("{ . + : ; ' ! ± @ # $ % ˆ ˜ ` ? - < … æ ‘ “ “ ≥ æ ≤ ¡ ™ £ ¢ ∞ § ¶ • ª º – ≠ œ ∑ ´ ® ¥ ¨ ˆ π ¬ ˚ ∆ ˙ © ƒ ∂ ß å Ω ç ≈ √ ˜ µ § }");
+            values[0].Add(". + : ; ' ! ± @ # $ % ˆ ˜ ` ? - < … æ ‘ “ “ ≥ æ ≤ ¡ ™ £ ¢ ∞ § ¶ • ª º – ≠ œ ∑ ´ ® ¥ ¨ ˆ π ¬ ˚ ∆ ˙ © ƒ ∂ ß å Ω ç ≈ √ ˜ µ §");
             lexer.Lex(keys, values, mockExportConfig);
-            
-            Assert.AreEqual("s n sp s_p n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n e_p ep e", mockParser.transition);
+
+            Assert.AreEqual("s n sp s_p n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n n e_p ep e", mockParser.transition);
         }
 
         [Test]
@@ -88,25 +88,25 @@ namespace GoogleSheet2JsonTest
         {
             values[0].Add("word with special > dash");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n d n e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexMultipleWordsWithSquareBraceTest()
         {
             values[0].Add("word with special [] square braces");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n o_s_b c_s_b n e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexMultipleWordsWithBraceTest()
         {
             values[0].Add("word with special () braces");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n o_b c_b n e_p ep e", mockParser.transition);
         }
 
@@ -115,16 +115,16 @@ namespace GoogleSheet2JsonTest
         {
             values[0].Add("1>2");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n d n e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexRangeOfNumbersWithSpaceTest()
         {
             values[0].Add(" 1 > 2 ");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n d n e_p ep e", mockParser.transition);
         }
 
@@ -133,55 +133,64 @@ namespace GoogleSheet2JsonTest
         {
             values[0].Add("[1,2,3,4]");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n o_s_b n c n c n c n c_s_b e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexCollectionOfNumbersWithSpacesTest()
         {
             values[0].Add(" [ 1 , 2 , 3 , 4 ] ");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n o_s_b n c n c n c n c_s_b e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexCollectionOfWordsWithSpacesTest()
         {
             values[0].Add(" [ one , two , three , four ] ");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n o_s_b n c n c n c n c_s_b e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexMapOfWordsAndNumberTest()
         {
             values[0].Add("(one, 1)");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n o_b n c n c_b e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexMapOfWordsAndNumberWithSpaceTest()
         {
             values[0].Add("( one , 1 )");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n o_b n c n c_b e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexArrayMapOfWordsAndNumberTest()
         {
-            values[0].Add("(one, 1) (two, 2) (three, 3)");
+            values[0].Add("{one, 1} {two, 2}");
             lexer.Lex(keys, values, mockExportConfig);
-            
-            Assert.AreEqual("s n sp s_p n o_b n c n c_b o_b n c n c_b o_b n c n c_b e_p ep e", mockParser.transition);
+
+            Assert.AreEqual("s n sp s_p n o_cb n c n c_cb o_cb n c n c_cb e_p ep e", mockParser.transition);
         }
-        
+
+        [Test]
+        public void LexArrayMapTest()
+        {
+            values[0].Add("{one, 1}");
+            lexer.Lex(keys, values, mockExportConfig);
+
+            Assert.AreEqual("s n sp s_p n o_cb n c n c_cb e_p ep e", mockParser.transition);
+        }
+
         [Test]
         public void LexMultipleValueDataTest()
         {
@@ -189,19 +198,19 @@ namespace GoogleSheet2JsonTest
             values.Add(new List<object>());
             values[1].Add("1");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n e_p ep sp s_p n n e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexMultipleKeyDataTest()
         {
             values[0].Add("1");
             values[0].Add("2");
             keys.Add("sampleKey 2");
-            
+
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n e_p s_p n n e_p ep e", mockParser.transition);
         }
 
@@ -210,34 +219,34 @@ namespace GoogleSheet2JsonTest
         {
             values[0].Add("-1");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n n e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexNegativeNumbersRangeTest()
         {
             values[0].Add("-1 > -2");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n n d n n e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexNegativeNumbersCollectionTest()
         {
             values[0].Add("[-1 , -2]");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n o_s_b n n c n n c_s_b e_p ep e", mockParser.transition);
         }
-        
+
         [Test]
         public void LexNegativeNumbersMapTest()
         {
             values[0].Add("(-1 , -2)");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n o_b n n c n n c_b e_p ep e", mockParser.transition);
         }
 
@@ -247,7 +256,7 @@ namespace GoogleSheet2JsonTest
             values[0].Add("{\"min\":1}");
             mockExportConfig.literalKeys.Add("sampleKey");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s n sp s_p n n e_p ep e", mockParser.transition);
         }
 
@@ -259,10 +268,10 @@ namespace GoogleSheet2JsonTest
             mockExportConfig.isSingleObject = true;
             mockExportConfig.isArrayOfObjects = false;
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s_s s_p n n e_p e", mockParser.transition);
         }
-        
+
         [Test]
         public void LextSingleObjectWithLiteralValueTest()
         {
@@ -272,7 +281,7 @@ namespace GoogleSheet2JsonTest
             mockExportConfig.isArrayOfObjects = false;
             mockExportConfig.literalKeys.Add("sampleKey");
             lexer.Lex(keys, values, mockExportConfig);
-            
+
             Assert.AreEqual("s_s s_p n n e_p e", mockParser.transition);
         }
     }
@@ -285,7 +294,7 @@ namespace GoogleSheet2JsonTest
         {
             transition += "s_s";
         }
-        
+
         public void StartArrayOfObjects()
         {
             transition += "s";
@@ -326,22 +335,32 @@ namespace GoogleSheet2JsonTest
             transition += " c";
         }
 
-        public void OpenBrace()
+        public void OpenBracket()
         {
             transition += " o_b";
         }
 
-        public void CloseBrace()
+        public void CloseBracket()
         {
             transition += " c_b";
         }
 
-        public void OpenSquareBrackets()
+        public void OpenCurlyBracket()
+        {
+            transition += " o_cb";
+        }
+
+        public void CloseCurlyBracket()
+        {
+            transition += " c_cb";
+        }
+
+        public void OpenSquareBracket()
         {
             transition += " o_s_b";
         }
 
-        public void CloseSquareBrackets()
+        public void CloseSquareBracket()
         {
             transition += " c_s_b";
         }
@@ -351,7 +370,8 @@ namespace GoogleSheet2JsonTest
             transition += " d";
         }
 
-        public void WhiteSpace() { }
+        public void WhiteSpace()
+        {
+        }
     }
 }
-

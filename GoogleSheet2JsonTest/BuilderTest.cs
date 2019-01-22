@@ -23,7 +23,7 @@ namespace GoogleSheet2JsonTest
             builder.SetField("some value");
             builder.EndField();
             builder.EndProperty();
-            
+
             AssertFieldContainsOnlyText(builder.BuildData.properties[0].fields[0]);
         }
 
@@ -33,12 +33,12 @@ namespace GoogleSheet2JsonTest
             builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
-            builder.StartMap();    
+            builder.StartMap();
             builder.AddKey("key");
             builder.AddValue("value");
             builder.EndField();
             builder.EndProperty();
-            
+
             AssertFieldContainsMap(builder.BuildData.properties[0].fields[0]);
         }
 
@@ -48,34 +48,34 @@ namespace GoogleSheet2JsonTest
             builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
-            
-            builder.StartMap();    
+
+            builder.StartMapArray();
             builder.AddKey("key");
             builder.AddValue("value");
-            
-            builder.StartMap();    
+
+            builder.StartMapArray();
             builder.AddKey("key");
             builder.AddValue("value");
-            
+
             builder.EndField();
             builder.EndProperty();
 
             AssertFieldContainsArrayOfMaps(builder.BuildData.properties[0].fields[0]);
         }
-        
+
         [Test]
         public void FieldContainesCollectionTest()
         {
             builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
-            
+
             builder.StartCollection();
             builder.SetField("1");
             builder.AddFieldToCollection();
             builder.SetField("2");
             builder.AddFieldToCollection();
-            
+
             builder.EndField();
             builder.EndProperty();
 
@@ -88,7 +88,7 @@ namespace GoogleSheet2JsonTest
             builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
-            
+
             builder.SetField("1");
             builder.TryAddMinRange("-");
             builder.TryAddMaxRange("2");
@@ -105,14 +105,14 @@ namespace GoogleSheet2JsonTest
             builder.StartBuildArrayOfObjects();
             builder.StartProperty();
             builder.StartField("property");
-            
+
             builder.SetField("a");
             builder.TryAddMinRange("-");
             builder.TryAddMaxRange("b");
 
             builder.EndField();
             builder.EndProperty();
-            
+
             AssertFieldContainsOnlyText(builder.BuildData.properties[0].fields[0]);
         }
 
@@ -131,7 +131,7 @@ namespace GoogleSheet2JsonTest
             Assert.IsEmpty(fieldNode.min);
             Assert.IsEmpty(fieldNode.max);
         }
-        
+
         private void AssertFieldContainsMap(FieldNode fieldNode)
         {
             Assert.True(fieldNode.isMap);
@@ -147,7 +147,7 @@ namespace GoogleSheet2JsonTest
             Assert.IsEmpty(fieldNode.min);
             Assert.IsEmpty(fieldNode.max);
         }
-        
+
         private void AssertFieldContainsArrayOfMaps(FieldNode fieldNode)
         {
             Assert.True(fieldNode.isArrayOfMaps);
@@ -163,7 +163,7 @@ namespace GoogleSheet2JsonTest
             Assert.IsEmpty(fieldNode.min);
             Assert.IsEmpty(fieldNode.max);
         }
-        
+
         private void AssertFieldContainsCollection(FieldNode fieldNode)
         {
             Assert.True(fieldNode.isCollection);
@@ -179,7 +179,7 @@ namespace GoogleSheet2JsonTest
             Assert.IsEmpty(fieldNode.min);
             Assert.IsEmpty(fieldNode.max);
         }
-        
+
         private void AssertFieldContainsMinMaxRange(FieldNode fieldNode)
         {
             Assert.True(fieldNode.isRange);

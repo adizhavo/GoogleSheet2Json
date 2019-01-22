@@ -15,20 +15,20 @@ namespace GoogleSheet2Json.Generators
         public const string OPEN_BRAC = "{";
         public const string CLOSE_BRAC = "}";
         private ExportConfig exportConfig;
-        
+
         public void Generate(Data buildData, ExportConfig exportConfig)
         {
             this.exportConfig = exportConfig;
-            
+
             if (exportConfig.isArrayOfObjects)
             {
-                GenerateArrayOfObjects(buildData);                
+                GenerateArrayOfObjects(buildData);
             }
             else if (exportConfig.isSingleObject)
             {
                 GenerateSingleObject(buildData);
             }
-            
+
             Logger.LogLine($"Generated content: \n{GeneratedContent}");
         }
 
@@ -36,7 +36,7 @@ namespace GoogleSheet2Json.Generators
         {
             GenerateFields(buildData.fields);
         }
-        
+
         private void GenerateArrayOfObjects(Data buildData)
         {
             GeneratedContent = OPEN_BRAC;
@@ -58,8 +58,8 @@ namespace GoogleSheet2Json.Generators
         private void GenerateFields(List<FieldNode> fields)
         {
             GeneratedContent += OPEN_BRAC;
-            
-            for (int i = 0; i < fields.Count; i ++)
+
+            for (int i = 0; i < fields.Count; i++)
             {
                 var property = fields[i];
                 GeneratedContent += QUOTE + property.definition + QUOTE + COLON;
@@ -84,18 +84,18 @@ namespace GoogleSheet2Json.Generators
                 {
                     BuildField(property.definition, property.fieldValue);
                 }
-                
+
                 if (i < fields.Count - 1)
                     GeneratedContent += COMMA;
             }
-            
+
             GeneratedContent += CLOSE_BRAC;
         }
 
         private void BuildField(string definition, string element)
         {
             var isString = IsStringValue(element);
-            
+
             if (isString && !exportConfig.literalKeys.Contains(definition)) GeneratedContent += QUOTE;
 
             GeneratedContent += TryIfElementIsBoolean(element);
@@ -125,7 +125,7 @@ namespace GoogleSheet2Json.Generators
         private void BuildRange(string min, string max)
         {
             GeneratedContent += OPEN_BRAC + QUOTE + "min" + QUOTE + COLON + min + COMMA + QUOTE + "max" + QUOTE + COLON +
-                             max + CLOSE_BRAC;
+                                max + CLOSE_BRAC;
         }
 
         // Build collection as [ x, y, z ]
@@ -146,6 +146,7 @@ namespace GoogleSheet2Json.Generators
                 if (j < collectionValues.Count - 1)
                     GeneratedContent += COMMA;
             }
+
             GeneratedContent += CLOSE_SQUARE_BRAC;
         }
 
@@ -181,7 +182,7 @@ namespace GoogleSheet2Json.Generators
             int outInt = -1;
             long outLong = -1;
             float outFloat = -1f;
-            
+
             var isInt = short.TryParse(value, out outShort) || int.TryParse(value, out outInt) || long.TryParse(value, out outLong);
             var isFloat = float.TryParse(value, out outFloat);
 
@@ -196,7 +197,7 @@ namespace GoogleSheet2Json.Generators
             }
             else if (element == StringConstants.FALSE_CHAR)
             {
-                element = "false";   
+                element = "false";
             }
 
             return element;

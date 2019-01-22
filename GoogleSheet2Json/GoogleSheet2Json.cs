@@ -13,29 +13,28 @@ namespace GoogleSheet2Json
     /// reads and interpres arguments, interacts with the google API to extract the data from the sheet
     /// It loads credentials and creates the service for the comunication
     /// </summary>
-
     public class GoogleSheet2Json
     {
         public IList<IList<object>> dataKeys { private set; get; }
         public IList<IList<object>> dataValues { private set; get; }
-        
-        private static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
+
+        private static string[] Scopes = {SheetsService.Scope.SpreadsheetsReadonly};
         private SheetsService service;
         private AppConfig appConfig;
-        
+
         public GoogleSheet2Json(AppConfig appConfig)
         {
             this.appConfig = appConfig;
-            
+
             // Load credentials
-            var credential = CreateUserCredentials(); 
+            var credential = CreateUserCredentials();
 
             // Create Google Sheets API service.
             service = new SheetsService(new BaseClientService.Initializer()
-                {
-                    HttpClientInitializer = credential,
-                    ApplicationName = appConfig.applicationName,
-                });
+            {
+            HttpClientInitializer = credential,
+            ApplicationName = appConfig.applicationName,
+            });
         }
 
         public void ReadDataFromSheet(ExportConfig exportConfig)
@@ -57,6 +56,7 @@ namespace GoogleSheet2Json
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, Scopes, appConfig.userName, CancellationToken.None, new FileDataStore(credPath, true)).Result;
                 Console.WriteLine("[GoogleSheet2Json] Credential file saved to: " + credPath);
             }
+
             return credential;
         }
 
